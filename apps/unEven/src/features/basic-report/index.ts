@@ -1,0 +1,1 @@
+export { BasicReportPage } from "./BasicReportPage";

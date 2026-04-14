@@ -1,0 +1,887 @@
+.shell {
+  min-height: 100vh;
+}
+
+.page {
+  display: grid;
+  gap: 1.375rem;
+}
+
+.workspaceBody {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
+}
+
+.navGlyph,
+.metricGlyph,
+.quickActionGlyph {
+  position: relative;
+  display: inline-flex;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.navGlyph::before,
+.navGlyph::after,
+.metricGlyph::before,
+.metricGlyph::after,
+.quickActionGlyph::before,
+.quickActionGlyph::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.navGlyphDashboard::before,
+.metricGlyphStudents::before {
+  inset: 0.1rem;
+  border-radius: 0.32rem;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphDashboard::after,
+.metricGlyphStudents::after {
+  left: 0.26rem;
+  right: 0.26rem;
+  top: 0.52rem;
+  height: 0.1rem;
+  background: currentColor;
+  box-shadow:
+    0 -0.28rem 0 currentColor,
+    0 0.28rem 0 currentColor;
+}
+
+.navGlyphAdmissions::before,
+.metricGlyphAdmissions::before {
+  left: 0.5rem;
+  top: 0.08rem;
+  bottom: 0.08rem;
+  width: 0.16rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.navGlyphAdmissions::after,
+.metricGlyphAdmissions::after {
+  top: 0.5rem;
+  left: 0.08rem;
+  right: 0.08rem;
+  height: 0.16rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.quickActionGlyphAdmissions::before {
+  left: 0.5rem;
+  top: 0.08rem;
+  bottom: 0.08rem;
+  width: 0.14rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.quickActionGlyphAdmissions::after {
+  top: 0.5rem;
+  left: 0.08rem;
+  right: 0.08rem;
+  height: 0.14rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.navGlyphStudents::before,
+.metricGlyphTeachers::before {
+  top: 0.08rem;
+  left: 0.32rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphStudents::after,
+.metricGlyphTeachers::after {
+  left: 0.12rem;
+  right: 0.12rem;
+  bottom: 0.08rem;
+  height: 0.42rem;
+  border-radius: 999px 999px 0 0;
+  border: 1.8px solid currentColor;
+  border-bottom: 0;
+}
+
+.quickActionGlyphStudents::before {
+  top: 0.08rem;
+  left: 0.32rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  border: 1.6px solid currentColor;
+}
+
+.quickActionGlyphStudents::after {
+  left: 0.12rem;
+  right: 0.12rem;
+  bottom: 0.08rem;
+  height: 0.42rem;
+  border-radius: 999px 999px 0 0;
+  border: 1.6px solid currentColor;
+  border-bottom: 0;
+}
+
+.navGlyphAttendance::before,
+.metricGlyphAttendance::before {
+  inset: 0.1rem;
+  border-radius: 0.32rem;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphAttendance::after,
+.metricGlyphAttendance::after {
+  left: 0.22rem;
+  top: 0.54rem;
+  width: 0.66rem;
+  height: 0.34rem;
+  border-left: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.quickActionGlyphAttendance::before {
+  left: 0.22rem;
+  top: 0.54rem;
+  width: 0.66rem;
+  height: 0.34rem;
+  border-left: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.navGlyphFees::before,
+.metricGlyphDues::before {
+  inset: 0.12rem 0.18rem;
+  border-radius: 0.34rem;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphFees::after,
+.metricGlyphDues::after {
+  left: 0.3rem;
+  right: 0.3rem;
+  top: 0.52rem;
+  height: 0.12rem;
+  background: currentColor;
+  box-shadow:
+    0 -0.28rem 0 currentColor,
+    0 0.28rem 0 currentColor;
+}
+
+.quickActionGlyphFees::before {
+  inset: 0.12rem 0.18rem;
+  border-radius: 0.34rem;
+  border: 1.6px solid currentColor;
+}
+
+.quickActionGlyphFees::after {
+  left: 0.3rem;
+  right: 0.3rem;
+  top: 0.52rem;
+  height: 0.12rem;
+  background: currentColor;
+  box-shadow:
+    0 -0.28rem 0 currentColor,
+    0 0.28rem 0 currentColor;
+}
+
+.navGlyphNotices::before {
+  inset: 0.12rem 0.18rem;
+  border-radius: 0.34rem;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphNotices::after {
+  left: 0.34rem;
+  right: 0.34rem;
+  top: 0.36rem;
+  height: 0.12rem;
+  background: currentColor;
+  box-shadow:
+    0 0.28rem 0 currentColor,
+    0 0.56rem 0 currentColor;
+}
+
+.navGlyphTransport::before {
+  left: 0.14rem;
+  right: 0.14rem;
+  top: 0.18rem;
+  bottom: 0.18rem;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphReports::before {
+  left: 0.18rem;
+  bottom: 0.14rem;
+  width: 0.16rem;
+  height: 0.52rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow:
+    0.3rem -0.12rem 0 currentColor,
+    0.6rem 0.08rem 0 currentColor;
+}
+
+.navGlyphSettings::before {
+  inset: 0.12rem;
+  border-radius: 999px;
+  border: 1.8px solid currentColor;
+}
+
+.navGlyphSettings::after {
+  inset: 0.4rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.quickActionGlyphSettings::before {
+  inset: 0.12rem;
+  border-radius: 999px;
+  border: 1.6px solid currentColor;
+}
+
+.quickActionGlyphSettings::after {
+  inset: 0.42rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  justify-content: flex-end;
+}
+
+.page :global([class*="PageHeader_search"]) {
+  width: min(100%, 34rem);
+  flex: 1 1 34rem;
+}
+
+.searchCluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+}
+
+.searchField {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: min(100%, 21rem);
+  flex: 1 1 24rem;
+  padding: 0 0.95rem 0 2.8rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.95rem;
+  background: var(--surface-raised);
+  min-height: 3rem;
+}
+
+.searchField input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.searchField input::placeholder {
+  color: var(--text-muted);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 1.8px solid var(--text-muted);
+  border-radius: 999px;
+}
+
+.searchIcon::after {
+  content: "";
+  position: absolute;
+  right: -0.28rem;
+  bottom: -0.18rem;
+  width: 0.4rem;
+  height: 0.12rem;
+  border-radius: 999px;
+  background: var(--text-muted);
+  transform: rotate(45deg);
+}
+
+.yearBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 9.5rem;
+  min-height: 3rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.95rem;
+  background: var(--surface-raised);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  white-space: nowrap;
+}
+
+.yearBadge span {
+  line-height: 1;
+}
+
+.chevronDown {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-right: 1.7px solid var(--text-muted);
+  border-bottom: 1.7px solid var(--text-muted);
+  transform: rotate(45deg) translateY(-0.1rem);
+}
+
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.95rem;
+  background: var(--surface-raised);
+  color: var(--text-muted);
+}
+
+.notificationGlyph {
+  position: relative;
+  width: 0.95rem;
+  height: 1rem;
+}
+
+.notificationGlyph::before,
+.notificationGlyph::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.notificationGlyph::before {
+  left: 0.05rem;
+  right: 0.05rem;
+  top: 0.08rem;
+  bottom: 0.16rem;
+  border: 1.8px solid currentColor;
+  border-top-left-radius: 0.55rem;
+  border-top-right-radius: 0.55rem;
+  border-bottom-left-radius: 0.28rem;
+  border-bottom-right-radius: 0.28rem;
+}
+
+.notificationGlyph::after {
+  left: 0.32rem;
+  bottom: 0.02rem;
+  width: 0.32rem;
+  height: 0.12rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -0.22rem;
+  right: -0.22rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.18rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface-raised);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.userAvatar {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-raised));
+  color: var(--accent);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.metricsGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.metricCard {
+  min-height: 7.35rem;
+}
+
+.metricCard :global([class*="MetricCard_body"]) {
+  gap: 0.75rem;
+}
+
+.metricCard :global([class*="MetricCard_label"]) {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metricCard :global([class*="MetricCard_value"]) {
+  font-size: clamp(1.75rem, 1.5vw + 1rem, 2.05rem);
+  font-weight: 800;
+}
+
+.metricCard :global([class*="MetricCard_meta"]) {
+  font-size: 0.8rem;
+}
+
+.metricCardAccent {
+  --metric-accent: color-mix(in srgb, var(--accent) 12%, white);
+  --metric-ink: color-mix(in srgb, var(--accent) 78%, black);
+}
+
+.metricCardSuccess {
+  --metric-accent: color-mix(in srgb, var(--success-strong) 12%, white);
+  --metric-ink: color-mix(in srgb, var(--success-strong) 78%, black);
+}
+
+.metricCardWarning {
+  --metric-accent: color-mix(in srgb, var(--warning-strong) 14%, white);
+  --metric-ink: color-mix(in srgb, var(--warning-strong) 78%, black);
+}
+
+.metricCardDanger {
+  --metric-accent: color-mix(in srgb, var(--danger-strong) 14%, white);
+  --metric-ink: color-mix(in srgb, var(--danger-strong) 78%, black);
+}
+
+.metricCardNeutral {
+  --metric-accent: color-mix(in srgb, var(--neutral-strong) 10%, white);
+  --metric-ink: color-mix(in srgb, var(--neutral-strong) 80%, black);
+}
+
+.metricCard :global([class*="MetricCard_icon"]) {
+  background: var(--metric-accent);
+  color: var(--metric-ink);
+}
+
+.quickActionsCard {
+  overflow: hidden;
+  padding-top: 1.25rem;
+}
+
+.quickActionsBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.quickLinksGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.quickActionChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2rem;
+  padding: 0 1rem 0 0.35rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.quickActionChipPrimary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--surface-raised);
+}
+
+.quickActionIconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-card-subtle) 92%, var(--surface-raised));
+}
+
+.quickActionChipPrimary .quickActionIconWrap {
+  background: color-mix(in srgb, var(--surface-raised) 22%, transparent);
+}
+
+.priorityNote {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: min(100%, 23rem);
+}
+
+.priorityNoteCopy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.priorityNoteCopy span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.priorityNoteCopy strong {
+  color: var(--text-strong);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.workspaceGrid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.7fr) minmax(20rem, 1fr);
+}
+
+.primaryColumn,
+.secondaryColumn {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+.admissionTable,
+.admissionCard,
+.occupancyCard,
+.noticeCard {
+  height: fit-content;
+}
+
+.summaryCard {
+  height: 100%;
+}
+
+.noticeRows {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.noticeRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.9rem 0.95rem;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--surface-card-subtle) 88%, var(--surface-raised));
+}
+
+.noticeDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.25rem;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.noticeDotWarning {
+  background: var(--warning-strong);
+}
+
+.noticeCopy {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.noticeCopy strong {
+  font-size: 0.9rem;
+  color: var(--text-strong);
+}
+
+.noticeCopy span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.studentCell {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.admissionTable {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 40rem;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--surface-muted) 65%, white);
+}
+
+.table td {
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-strong);
+  font-size: 0.92rem;
+}
+
+.studentCell strong {
+  font-size: 0.95rem;
+  color: var(--text-strong);
+}
+
+.studentCell span {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.summaryPair {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: stretch;
+}
+
+.attendanceBody {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  height: 100%;
+}
+
+.summaryList {
+  width: 100%;
+}
+
+.summaryListRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.summaryListRow span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.summaryListRow strong {
+  color: var(--text-strong);
+  font-size: 0.92rem;
+}
+
+.feeCollectionBody {
+  display: grid;
+  gap: 1rem;
+  height: 100%;
+}
+
+.collectionHeadline {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.collectionHeadline span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.collectionHeadline strong {
+  color: var(--text-strong);
+  font-size: clamp(1.8rem, 2vw, 2.15rem);
+  line-height: 1;
+}
+
+.collectionBars {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.85rem;
+  min-height: 9.5rem;
+  flex: 1 1 auto;
+}
+
+.collectionBarItem {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  flex: 1;
+}
+
+.collectionBarItem span {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.collectionBarTrack {
+  display: flex;
+  align-items: end;
+  width: 100%;
+  height: 6.5rem;
+}
+
+.collectionBarFill {
+  display: block;
+  width: 100%;
+  border-radius: 999px 999px 0.55rem 0.55rem;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+
+.occupancyList {
+  display: grid;
+  gap: 1rem;
+}
+
+.occupancyRow {
+  display: grid;
+  align-items: center;
+  gap: 0.9rem;
+  grid-template-columns: 5rem minmax(0, 1fr) auto;
+}
+
+.occupancyLabel,
+.occupancyValue {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.occupancyValue {
+  min-width: 2rem;
+  text-align: right;
+}
+
+.occupancyTrack {
+  position: relative;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border-subtle) 78%, white);
+  overflow: hidden;
+}
+
+.occupancyFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.emptyState {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1200px) {
+  .metricsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .quickActionsBody {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workspaceGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .summaryPair {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .workspaceBody {
+    padding: 1rem;
+    border-radius: 1.2rem;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .headerActions {
+    justify-content: flex-start;
+  }
+
+  .searchCluster {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchField {
+    min-width: 100%;
+    flex-basis: auto;
+  }
+
+  .yearBadge {
+    width: 100%;
+  }
+
+  .priorityNote {
+    justify-content: flex-start;
+    min-width: 100%;
+  }
+
+  .occupancyRow {
+    grid-template-columns: 1fr;
+  }
+
+  .occupancyValue {
+    text-align: left;
+  }
+
+  .table {
+    min-width: 34rem;
+  }
+}

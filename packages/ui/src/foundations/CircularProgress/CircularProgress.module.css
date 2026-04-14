@@ -1,0 +1,109 @@
+.progress {
+  --progress-size: 7.5rem;
+  --progress-stroke: 0.5625rem;
+  display: inline-grid;
+  justify-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.header {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  text-align: center;
+}
+
+.label,
+.hint,
+.valueLabel,
+.centerLabel {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.label {
+  color: var(--text-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.meter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--progress-size);
+  block-size: var(--progress-size);
+}
+
+.graphic {
+  inline-size: 100%;
+  block-size: 100%;
+  transform: rotate(-90deg);
+}
+
+.track,
+.fill {
+  fill: none;
+  stroke-width: var(--progress-stroke);
+}
+
+.track {
+  stroke: color-mix(in srgb, var(--border-subtle) 72%, var(--surface-card-subtle));
+}
+
+.fill {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 180ms ease;
+}
+
+.centerLabel {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  max-inline-size: 62%;
+  color: var(--text-strong);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.valueLabel {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.sizeSm {
+  --progress-size: 5.25rem;
+  --progress-stroke: 0.5rem;
+}
+
+.sizeSm .centerLabel {
+  font-size: 0.875rem;
+}
+
+.sizeMd {
+  --progress-size: 7.5rem;
+  --progress-stroke: 0.5625rem;
+}
+
+.sizeLg {
+  --progress-size: 10rem;
+  --progress-stroke: 0.6875rem;
+}
+
+.sizeLg .centerLabel {
+  font-size: 1.125rem;
+}

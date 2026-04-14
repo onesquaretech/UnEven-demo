@@ -1,0 +1,155 @@
+:root {
+  color-scheme: light;
+  --accent: #1f6feb;
+  --accent-strong: #1458bc;
+  --accent-2: #0c9784;
+  --accent-soft: rgba(31, 111, 235, 0.12);
+  --surface-page: #f4f7fb;
+  --surface-panel: rgba(255, 255, 255, 0.84);
+  --surface-raised: #ffffff;
+  --surface-card: #ffffff;
+  --surface-card-subtle: #edf3fb;
+  --border-subtle: rgba(25, 39, 58, 0.12);
+  --border-strong: rgba(25, 39, 58, 0.2);
+  --text-title: 1.75rem;
+  --text-subtitle: 1.125rem;
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-label: 0.8125rem;
+  --text-strong: #162033;
+  --text-muted: #5f6980;
+  --focus-ring: rgba(31, 111, 235, 0.22);
+  --success-soft: #dff6ea;
+  --success-strong: #1d7a48;
+  --warning-soft: #fff1d9;
+  --warning-strong: #9a6112;
+  --danger-soft: #fde5e7;
+  --danger-soft-strong: #f7d1d6;
+  --danger-strong: #aa3045;
+  --info-soft: #e1efff;
+  --info-strong: #205cb7;
+  --neutral-soft: #e7edf5;
+  --neutral-strong: #4b5870;
+  --chip-selected-ring: rgba(31, 111, 235, 0.18);
+  --shadow-soft: 0 20px 45px rgba(23, 37, 63, 0.08);
+  --shadow-strong: 0 24px 56px rgba(23, 37, 63, 0.14);
+  --space-1: 0.25rem;
+  --space-2: 0.625rem;
+  --space-3: 0.875rem;
+  --space-4: 1.125rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 999px;
+  --size-control-sm: 2.25rem;
+  --size-control-md: 2.75rem;
+  --size-control-lg: 3.25rem;
+  --size-icon-sm: 1rem;
+  --size-icon-md: 1.125rem;
+  --size-icon-lg: 1.375rem;
+  --layout-gap-sm: 0.625rem;
+  --layout-gap-md: 0.875rem;
+  --layout-gap-lg: 1.25rem;
+  --layout-shell-sidebar-width: 17.5rem;
+  --layout-content-max-width: 84rem;
+  --responsive-gap: clamp(0.75rem, 1vw + 0.5rem, 1.25rem);
+  --responsive-section-space: clamp(1rem, 1.4vw + 0.75rem, 2rem);
+  --responsive-card-radius: clamp(0.875rem, 0.5vw + 0.75rem, 1.25rem);
+  font-family:
+    "Sora",
+    "Segoe UI",
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --accent: #69a7ff;
+  --accent-strong: #8ab9ff;
+  --accent-2: #3fd0b9;
+  --accent-soft: rgba(105, 167, 255, 0.16);
+  --surface-page: #0e1625;
+  --surface-panel: rgba(20, 31, 48, 0.82);
+  --surface-raised: #172133;
+  --surface-card: #172133;
+  --surface-card-subtle: #111b2b;
+  --border-subtle: rgba(217, 230, 255, 0.1);
+  --border-strong: rgba(217, 230, 255, 0.2);
+  --text-title: 1.75rem;
+  --text-subtitle: 1.125rem;
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-label: 0.8125rem;
+  --text-strong: #f5f8ff;
+  --text-muted: #98a4be;
+  --focus-ring: rgba(105, 167, 255, 0.28);
+  --success-soft: rgba(56, 161, 105, 0.16);
+  --success-strong: #7fe2ae;
+  --warning-soft: rgba(214, 158, 46, 0.16);
+  --warning-strong: #f4c768;
+  --danger-soft: rgba(229, 62, 62, 0.16);
+  --danger-soft-strong: rgba(229, 62, 62, 0.24);
+  --danger-strong: #ff98a4;
+  --info-soft: rgba(66, 153, 225, 0.16);
+  --info-strong: #88c6ff;
+  --neutral-soft: rgba(152, 164, 190, 0.18);
+  --neutral-strong: #c1cde2;
+  --chip-selected-ring: rgba(105, 167, 255, 0.24);
+  --shadow-soft: 0 24px 48px rgba(0, 0, 0, 0.28);
+  --shadow-strong: 0 30px 60px rgba(0, 0, 0, 0.38);
+  --space-1: 0.25rem;
+  --space-2: 0.625rem;
+  --space-3: 0.875rem;
+  --space-4: 1.125rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 999px;
+  --size-control-sm: 2.25rem;
+  --size-control-md: 2.75rem;
+  --size-control-lg: 3.25rem;
+  --size-icon-sm: 1rem;
+  --size-icon-md: 1.125rem;
+  --size-icon-lg: 1.375rem;
+  --layout-gap-sm: 0.625rem;
+  --layout-gap-md: 0.875rem;
+  --layout-gap-lg: 1.25rem;
+  --layout-shell-sidebar-width: 17.5rem;
+  --layout-content-max-width: 84rem;
+  --responsive-gap: clamp(0.75rem, 1vw + 0.5rem, 1.25rem);
+  --responsive-section-space: clamp(1rem, 1.4vw + 0.75rem, 2rem);
+  --responsive-card-radius: clamp(0.875rem, 0.5vw + 0.75rem, 1.25rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--surface-page);
+  color: var(--text-strong);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}

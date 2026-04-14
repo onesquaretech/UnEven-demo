@@ -1,0 +1,346 @@
+.shell {
+  min-height: 100vh;
+}
+
+.page {
+  display: grid;
+  gap: 1.375rem;
+}
+
+.workspaceBody {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
+}
+
+.filterCard {
+  overflow: hidden;
+}
+
+.filterBar {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.searchField {
+  min-width: min(100%, 17rem);
+}
+
+.filterField {
+  min-width: min(100%, 9rem);
+}
+
+.filterSummary {
+  margin: 0.85rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.contentGrid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(15.4rem, 0.92fr) minmax(0, 2.05fr) minmax(15.6rem, 0.94fr);
+  align-items: start;
+}
+
+.routeRail,
+.tableCard,
+.detailCard {
+  min-width: 0;
+}
+
+.routeStack,
+.tableStack,
+.detailStack,
+.stopStack {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.routeCard {
+  display: grid;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.125rem;
+  background: var(--surface-raised);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.routeCardActive {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border-subtle));
+  background: color-mix(in srgb, var(--accent-soft) 72%, var(--surface-raised));
+}
+
+.routeCardCopy {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.routeCardCopy strong,
+.studentCopy strong,
+.stopBody strong,
+.vehicleBody strong,
+.capacityBody strong,
+.routeFeeBody strong,
+.routeStatusBody strong {
+  color: var(--text-strong);
+  font-size: 0.93rem;
+  font-weight: 700;
+}
+
+.routeCardCopy span,
+.studentCopy span,
+.routeStatusBody span,
+.routeStatusBody p,
+.vehicleBody span,
+.vehicleBody p,
+.capacityBody span,
+.stopBody span,
+.routeFeeBody span,
+.conflictBody p {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.routeProgressWrap,
+.capacityProgressWrap {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.routeProgressValue {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.routeStatusCard,
+.feeMappingCard,
+.vehicleCard,
+.capacityCard,
+.stopCard,
+.routeFeeCard,
+.conflictCard {
+  background: color-mix(in srgb, var(--surface-card-subtle) 84%, var(--surface-page));
+}
+
+.routeStatusBody,
+.vehicleBody,
+.capacityBody,
+.routeFeeBody,
+.conflictBody {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dataTable {
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.studentCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.studentCopy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.avatarBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.avatarBadgeblue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.avatarBadgeviolet {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.avatarBadgeamber {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.avatarBadgerose {
+  background: #fecdd3;
+  color: #dc2626;
+}
+
+.avatarBadgesky {
+  background: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.avatarBadgeemerald {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.bodyValue {
+  color: var(--text-default);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.tableField label {
+  gap: 0;
+}
+
+.tableField label > span:first-child {
+  display: none;
+}
+
+.feePill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.6rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--surface-card-subtle) 82%, var(--surface-page));
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.feeMappingBody {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.feeMappingBody > div {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.feeMappingBody span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.feeMappingBody strong {
+  color: var(--text-strong);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.feeMappingBody p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
+.sectionLabel {
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.stopCardActive {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border-subtle));
+  background: color-mix(in srgb, var(--accent-soft) 72%, var(--surface-raised));
+}
+
+.stopBody {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.detailActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.iconGlyph {
+  position: relative;
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.iconGlyph::before,
+.iconGlyph::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.iconGlyphplus::before {
+  left: 0.47rem;
+  top: 0.16rem;
+  bottom: 0.16rem;
+  width: 0.08rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.iconGlyphplus::after {
+  left: 0.16rem;
+  right: 0.16rem;
+  top: 0.47rem;
+  height: 0.08rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+@media (max-width: 1180px) {
+  .contentGrid {
+    grid-template-columns: minmax(14rem, 0.9fr) minmax(0, 1.7fr);
+  }
+
+  .detailCard {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 880px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .feeMappingBody {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 720px) {
+  .workspaceBody {
+    padding: 1rem;
+  }
+
+  .detailActions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,745 @@
+.shell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: #f8fafc;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.shell::before,
+.shell::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.shell::before {
+  top: 3.5rem;
+  left: 7rem;
+  width: 12rem;
+  height: 12rem;
+  background: rgba(14, 165, 164, 0.04);
+  z-index: -1;
+}
+
+.shell::after {
+  top: 4.5rem;
+  right: 10rem;
+  width: 11rem;
+  height: 11rem;
+  background: rgba(14, 165, 164, 0.04);
+  z-index: -1;
+}
+
+.shell :global([class*="AuthShell_shell"]) {
+  position: relative;
+  width: min(100%, 86rem);
+  grid-template-columns: minmax(0, 716px) minmax(0, 660px);
+  gap: 0;
+  min-height: min(60rem, calc(100vh - 3rem));
+  height: min(60rem, calc(100vh - 3rem));
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 1.75rem;
+  background: transparent;
+  box-shadow: none;
+  z-index: 1;
+}
+
+.shell :global([class*="AuthShell_marketingPanel"]),
+.shell :global([class*="AuthShell_authPanel"]) {
+  position: relative;
+  min-width: 0;
+}
+
+.shell :global([class*="AuthShell_marketingInner"]) {
+  position: relative;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0;
+  padding: 3rem 4rem 1.7rem;
+  background: none;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.shell :global([class*="AuthShell_marketingInner"])::before,
+.shell :global([class*="AuthShell_marketingInner"])::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.shell :global([class*="AuthShell_marketingInner"])::before {
+  left: 31rem;
+  bottom: -0.75rem;
+  width: 14rem;
+  height: 14rem;
+  background: rgba(8, 145, 178, 0.05);
+  z-index: 0;
+}
+
+.shell :global([class*="AuthShell_marketingInner"])::after {
+  display: none;
+}
+
+.shell :global([class*="AuthShell_marketingInner"]) > *,
+.shell :global([class*="AuthShell_authPanelInner"]) > * {
+  position: relative;
+  z-index: 1;
+}
+
+.shell :global([class*="AuthShell_marketingContent"]) {
+  align-content: start;
+}
+
+.shell :global([class*="AuthShell_marketingFooter"]) {
+  align-self: end;
+}
+
+.shell :global([class*="AuthShell_authPanelInner"]) {
+  align-content: center;
+  justify-items: center;
+  padding: 2.5rem 4.2rem;
+  background: #f8fafc;
+}
+
+.shell :global([class*="AuthShell_authCard"]) {
+  width: 100%;
+  max-width: 26.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  justify-self: center;
+}
+
+.shell :global([class*="AuthShell_authFooter"]) {
+  width: 100%;
+  max-width: 26.25rem;
+  justify-self: center;
+}
+
+.content {
+  display: grid;
+  gap: 0.82rem;
+}
+
+.marketingPanel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  min-height: 100%;
+}
+
+.brandRibbon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.brandSpacer {
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+
+.brandMark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 2.75rem;
+  border-radius: 0.75rem;
+  background: #0ea5a4;
+}
+
+.brandMarkPrimary,
+.brandMarkSecondary {
+  position: absolute;
+  display: block;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.brandMarkPrimary {
+  width: 1.12rem;
+  height: 1.18rem;
+  right: 0.76rem;
+  top: 0.72rem;
+  border-radius: 0.42rem 0.42rem 0.28rem 0.55rem;
+}
+
+.brandMarkSecondary {
+  width: 0.9rem;
+  height: 0.9rem;
+  left: 0.82rem;
+  top: 1rem;
+  border-radius: 0.5rem 0.2rem 0.5rem 0.5rem;
+  opacity: 0.74;
+}
+
+.brandTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.brandTitle {
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.planChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  border: 1px solid #cffafe;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.36rem 1rem;
+}
+
+.heroBlock {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 3.2rem;
+}
+
+.heroTitle {
+  margin: 0;
+  display: grid;
+  color: #0f172a;
+  font-size: clamp(2.2rem, 3.2vw, 2.95rem);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+}
+
+.heroBody {
+  margin: 0;
+  color: #475569;
+  font-size: 1.02rem;
+  line-height: 1.58;
+  max-width: 32rem;
+}
+
+.featureList {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.85rem;
+}
+
+.featureRow {
+  display: grid;
+  grid-template-columns: 2.3rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.featureIconWrap {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 0.75rem;
+  background: #ecfeff;
+}
+
+.featureIcon {
+  position: relative;
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.featureIconGrid::before,
+.featureIconTrend::before,
+.featureIconShield::before,
+.featureIconShield::after {
+  content: "";
+  position: absolute;
+}
+
+.featureIconGrid::before {
+  inset: 0.06rem;
+  border: 2px solid #0ea5a4;
+  border-radius: 0.3rem;
+}
+
+.featureIconGrid::after {
+  content: "";
+  position: absolute;
+  left: 0.09rem;
+  right: 0.09rem;
+  top: 50%;
+  height: 2px;
+  background: #0ea5a4;
+  transform: translateY(-50%);
+  box-shadow: 0 -0.38rem 0 #0ea5a4, 0 0.38rem 0 #0ea5a4;
+}
+
+.featureIconTrend::before {
+  left: 0.08rem;
+  top: 0.83rem;
+  width: 0.46rem;
+  height: 0.46rem;
+  border-left: 2px solid #0ea5a4;
+  border-bottom: 2px solid #0ea5a4;
+  transform: rotate(-45deg);
+}
+
+.featureIconTrend::after {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  top: 0.56rem;
+  width: 0.78rem;
+  height: 0.32rem;
+  border-top: 2px solid #0ea5a4;
+  border-right: 2px solid #0ea5a4;
+  transform: skew(-34deg) rotate(-10deg);
+}
+
+.featureIconShield::before {
+  inset: 0.02rem 0.18rem 0.08rem;
+  border: 2px solid #0ea5a4;
+  border-radius: 0.45rem 0.45rem 0.65rem 0.65rem;
+}
+
+.featureIconShield::after {
+  left: 0.5rem;
+  top: 0.42rem;
+  width: 0.22rem;
+  height: 0.44rem;
+  border-right: 2px solid #0ea5a4;
+  border-bottom: 2px solid #0ea5a4;
+  transform: rotate(45deg);
+}
+
+.featureText {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.featureText strong {
+  color: #0f172a;
+  font-size: 0.89rem;
+  font-weight: 500;
+}
+
+.featureText span {
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.42;
+}
+
+.previewDeck {
+  position: relative;
+  min-height: 11.75rem;
+  margin-top: 2.8rem;
+  z-index: 1;
+}
+
+.previewDeck::after {
+  content: "";
+  position: absolute;
+  left: 23.25rem;
+  bottom: -0.15rem;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 999px;
+  background: rgba(14, 165, 164, 0.04);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.previewCardAttendance,
+.previewCardFinance,
+.previewCardAdmissions {
+  position: absolute;
+  width: 11.6rem;
+  min-height: 7.4rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 5px 10px rgba(15, 23, 42, 0.06);
+  z-index: 1;
+}
+
+.previewCardAttendance {
+  left: 1.2rem;
+  bottom: 1.3rem;
+}
+
+.previewCardFinance {
+  left: 9.1rem;
+  bottom: 2.95rem;
+}
+
+.previewCardAdmissions {
+  left: 17rem;
+  bottom: 0;
+}
+
+.metricValueCurrency {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.12rem;
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(1.45rem, 1vw + 1rem, 1.9rem);
+  letter-spacing: -0.04em;
+}
+
+.metricValueSymbol {
+  flex: 0 0 auto;
+  font-size: 0.78em;
+  font-weight: 800;
+}
+
+.metricValueAmount {
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.marketingFooter {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.footerNote {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.formSection {
+  display: grid;
+}
+
+.form {
+  display: grid;
+  gap: 0.82rem;
+}
+
+.fieldGroup {
+  display: grid;
+  gap: 0.78rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.fieldLabel {
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.control {
+  min-height: 3.1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0.82rem 1rem;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.control::placeholder {
+  color: #94a3b8;
+}
+
+.control:focus {
+  border-color: #14b8a6;
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.12);
+  outline: 0;
+}
+
+.passwordWrap {
+  position: relative;
+  display: grid;
+}
+
+.passwordControl {
+  padding-right: 3rem;
+}
+
+.passwordEye {
+  position: absolute;
+  right: 0.95rem;
+  top: 50%;
+  display: block;
+  width: 1.3rem;
+  height: 0.85rem;
+  border: 2px solid #94a3b8;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.passwordEye::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.32rem;
+  height: 0.32rem;
+  border: 1.75px solid #94a3b8;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.roleGroup {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.rolePills {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.rolePill {
+  min-width: 4.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.79rem;
+  font-weight: 500;
+  padding: 0.58rem 0.9rem;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.rolePillSelected {
+  border-color: #99f6e4;
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.linkButton {
+  border: 0;
+  background: transparent;
+  color: #0891b2;
+  cursor: pointer;
+  font-size: 0.79rem;
+  font-weight: 500;
+  padding: 0;
+}
+
+.linkButton:hover {
+  color: #0f766e;
+}
+
+.feedbackCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.feedbackDanger {
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.feedbackSuccess {
+  background: rgba(20, 184, 166, 0.06);
+}
+
+.feedbackHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.feedbackText {
+  margin: 0.55rem 0 0;
+  color: #475569;
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+.permissionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.permissionPill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #0f766e;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.28rem 0.58rem;
+}
+
+.inlineDivider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.95rem;
+  align-items: center;
+}
+
+.inlineDivider span {
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.inlineDivider p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.76rem;
+}
+
+.helpText {
+  margin: 0;
+  color: #475569;
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+@media (max-width: 1280px) {
+  .shell {
+    padding: 1.25rem;
+  }
+
+  .shell :global([class*="AuthShell_shell"]) {
+    width: min(100%, 80rem);
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem);
+    min-height: min(57rem, calc(100vh - 2.5rem));
+    height: min(57rem, calc(100vh - 2.5rem));
+  }
+
+  .shell :global([class*="AuthShell_marketingInner"]) {
+    padding: 2.55rem 3rem 1.7rem;
+  }
+
+  .shell :global([class*="AuthShell_authPanelInner"]) {
+    padding: 2.1rem 2.8rem;
+  }
+
+  .heroBlock {
+    margin-top: 2.8rem;
+  }
+
+  .previewCardAdmissions {
+    left: 17rem;
+  }
+}
+
+@media (max-width: 1100px) {
+  .shell {
+    overflow: auto;
+  }
+
+  .shell::after {
+    right: 3rem;
+  }
+
+  .shell :global([class*="AuthShell_shell"]) {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    height: auto;
+  }
+
+  .shell :global([class*="AuthShell_marketingInner"]),
+  .shell :global([class*="AuthShell_authPanelInner"]) {
+    padding: 2rem;
+  }
+
+  .shell :global([class*="AuthShell_marketingInner"]) {
+    border-radius: 1.75rem 1.75rem 0 0;
+  }
+
+  .previewDeck {
+    display: grid;
+    min-height: auto;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .previewCardAttendance,
+  .previewCardFinance,
+  .previewCardAdmissions {
+    position: static;
+    width: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding: 0;
+  }
+
+  .shell::before,
+  .shell::after {
+    display: none;
+  }
+
+  .shell :global([class*="AuthShell_shell"]) {
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .shell :global([class*="AuthShell_marketingInner"]),
+  .shell :global([class*="AuthShell_authPanelInner"]) {
+    padding: 1.5rem;
+  }
+
+  .heroBlock {
+    margin-top: 3rem;
+  }
+
+  .formActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rolePills {
+    gap: 0.5rem;
+  }
+}

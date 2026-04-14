@@ -1,0 +1,1 @@
+export { ClassSectionAllocationPage } from "./ClassSectionAllocationPage";

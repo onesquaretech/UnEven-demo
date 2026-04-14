@@ -1,0 +1,145 @@
+.noticeList {
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.leadingColumn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.125rem;
+}
+
+.leading,
+.marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+
+.leading {
+  background: color-mix(in srgb, var(--surface-panel) 84%, var(--brand-primary) 16%);
+  color: var(--text-strong);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.marker {
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, var(--brand-primary-strong), var(--brand-primary));
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--brand-primary) 14%, transparent);
+}
+
+.content {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.titleGroup {
+  display: grid;
+  gap: var(--space-1);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title {
+  min-width: 0;
+  color: var(--text-strong);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.metaRow,
+.supportRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.metaText,
+.description {
+  min-width: 0;
+  color: var(--text-muted);
+  overflow-wrap: break-word;
+}
+
+.metaText {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.headerAside {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+}
+
+.description {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.compact .entry {
+  gap: var(--space-2);
+}
+
+.compact .content {
+  gap: var(--space-1);
+}
+
+.compact .leading,
+.compact .marker {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.compact .marker {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+@container (max-width: 34rem) {
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .headerAside {
+    justify-content: flex-start;
+  }
+}

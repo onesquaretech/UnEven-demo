@@ -1,0 +1,1 @@
+export { StudentManagementListPage } from "./StudentManagementListPage";

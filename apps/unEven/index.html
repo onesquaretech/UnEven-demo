@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" name="robots" />
+    <meta content="same-origin" name="referrer" />
+    <meta content="OSIT" name="author" />
+    <meta content="Copyright 2026 OSIT. Demo preview only." name="copyright" />
+    <meta content="OSIT product demo preview for school ERP workflows." name="description" />
+    <meta content="#0f766e" name="theme-color" />
+    <title>OSIT School ERP Demo</title>
+    <script>
+      (function restoreGithubPagesRoute() {
+        var url = new URL(window.location.href);
+        var route = url.searchParams.get("__route");
+
+        if (!route) {
+          return;
+        }
+
+        var search = url.searchParams.get("__search") || "";
+        var hash = url.searchParams.get("__hash") || "";
+        var basePath = url.pathname.endsWith("/") ? url.pathname.slice(0, -1) : url.pathname;
+        var nextPathname = (basePath || "") + route;
+
+        window.history.replaceState(null, "", nextPathname + search + hash);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/src/main.tsx" type="module"></script>
+  </body>
+  </html>

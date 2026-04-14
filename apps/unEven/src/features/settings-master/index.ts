@@ -1,0 +1,1 @@
+export { SettingsMasterPage } from "./SettingsMasterPage";

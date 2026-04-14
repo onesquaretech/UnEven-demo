@@ -1,0 +1,107 @@
+.tabList {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  max-width: 100%;
+  padding: 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface-panel);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1 1 0;
+  min-width: fit-content;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--text-strong);
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.tab:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.tabSelected {
+  background: var(--surface-raised);
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.tabSelected:hover:not(:disabled) {
+  background: var(--surface-raised);
+}
+
+.tabDisabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.sizeSm .tab {
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.sizeMd .tab {
+  min-height: 42px;
+}
+
+.stretch .tab {
+  flex: 1 1 0;
+}
+
+.label {
+  display: inline-block;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.metaLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--info-soft);
+  color: var(--info-strong);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.tabSelected .metaLabel {
+  background: var(--surface-panel);
+  color: var(--text-strong);
+}

@@ -1,0 +1,219 @@
+.shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: var(--responsive-gap);
+  min-width: 0;
+  min-height: 620px;
+  padding: var(--space-3);
+  border-radius: calc(var(--responsive-card-radius) + var(--space-2));
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--surface-panel) 94%, transparent),
+      color-mix(in srgb, var(--surface-raised) 96%, transparent)
+    );
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+}
+
+.shellPlain {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.marketingPanel,
+.authPanel {
+  min-width: 0;
+}
+
+.marketingInner,
+.authPanelInner {
+  display: grid;
+  min-height: 100%;
+  min-width: 0;
+}
+
+.marketingInner {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border-radius: var(--responsive-card-radius);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--accent) 14%, var(--surface-raised)),
+      color-mix(in srgb, var(--surface-panel) 96%, transparent)
+    );
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border-subtle));
+}
+
+.marketingInnerPlain {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.brand,
+.marketingContent,
+.marketingFooter,
+.authFooter {
+  min-width: 0;
+}
+
+.brandBlock {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.brandIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.brandLogo,
+.brandMonogram {
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 3rem;
+  border-radius: 1rem;
+}
+
+.brandLogo {
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-raised);
+}
+
+.brandMonogram {
+  display: inline-grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface-raised));
+  color: var(--text-strong);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.brandText {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.brandEyebrow {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brandName,
+.brandMeta {
+  overflow-wrap: anywhere;
+}
+
+.brandName {
+  color: var(--text-strong);
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.brandMeta {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.marketingContent {
+  display: grid;
+  align-content: center;
+  gap: var(--space-4);
+}
+
+.marketingFooter {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.authPanelInner {
+  align-content: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+}
+
+.authCard {
+  width: min(100%, 34rem);
+  justify-self: end;
+}
+
+.authCardContent {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.authFooter {
+  width: min(100%, 34rem);
+  justify-self: end;
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+  text-align: center;
+}
+
+.viewportTablet {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.95fr);
+  min-height: 560px;
+}
+
+.viewportTablet .marketingInner,
+.viewportTablet .authPanelInner {
+  padding: var(--space-4);
+}
+
+.viewportMobile {
+  grid-template-columns: 1fr;
+  min-height: unset;
+  padding: var(--space-2);
+}
+
+.viewportMobile .marketingInner,
+.viewportMobile .authPanelInner {
+  padding: var(--space-4);
+}
+
+.viewportMobile .marketingInner {
+  gap: var(--space-4);
+}
+
+.viewportMobile .marketingContent {
+  align-content: start;
+}
+
+.viewportMobile .authCard,
+.viewportMobile .authFooter {
+  width: 100%;
+  justify-self: stretch;
+}
+
+@media (max-width: 880px) {
+  .shell {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+
+  .marketingInner,
+  .authPanelInner {
+    padding: var(--space-4);
+  }
+
+  .authCard,
+  .authFooter {
+    width: 100%;
+    justify-self: stretch;
+  }
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate" name="robots" />
+    <title>OSIT Demo Redirect</title>
+  </head>
+  <body>
+    <script>
+      (function redirectToAppRoute() {
+        var segments = window.location.pathname.split("/").filter(Boolean);
+        var hasGithubPagesBase = /\.github\.io$/i.test(window.location.hostname) && segments.length > 0;
+        var basePath = hasGithubPagesBase ? "/" + segments[0] : "";
+        var routeSegments = hasGithubPagesBase ? segments.slice(1) : segments;
+        var routePath = routeSegments.length > 0 ? "/" + routeSegments.join("/") : "/login";
+        var target =
+          (basePath || "") +
+          "/?__route=" +
+          encodeURIComponent(routePath) +
+          "&__search=" +
+          encodeURIComponent(window.location.search) +
+          "&__hash=" +
+          encodeURIComponent(window.location.hash);
+
+        window.location.replace(target);
+      })();
+    </script>
+  </body>
+</html>

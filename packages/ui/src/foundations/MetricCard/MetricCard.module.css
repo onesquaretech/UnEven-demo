@@ -1,0 +1,80 @@
+.metricCard {
+  min-width: 0;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--layout-gap-sm);
+  min-width: 0;
+}
+
+.label {
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: var(--text-label);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--size-icon-lg) + var(--space-4));
+  min-width: calc(var(--size-icon-lg) + var(--space-4));
+  height: calc(var(--size-icon-lg) + var(--space-4));
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.value {
+  min-width: 0;
+  margin: 0;
+  color: var(--text-strong);
+  font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.meta {
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: 0.35rem 0.625rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-card-subtle);
+  color: var(--text-strong);
+  font-size: var(--text-label);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}

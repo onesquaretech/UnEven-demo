@@ -1,0 +1,1 @@
+export { BasicTransportManagementPage } from "./BasicTransportManagementPage";

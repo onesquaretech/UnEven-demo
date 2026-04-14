@@ -1,0 +1,259 @@
+.stepProgress {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.stepProgressHorizontal {
+  gap: var(--space-3);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--layout-gap-sm);
+  min-width: 0;
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label,
+.hint,
+.valueLabel,
+.stepLabel,
+.description,
+.metaText {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.label {
+  color: var(--text-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.valueLabel {
+  color: var(--text-strong);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listHorizontal {
+  grid-template-columns: repeat(var(--step-count, 1), minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.itemHorizontal {
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+.rail {
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto 1fr;
+  row-gap: var(--space-2);
+}
+
+.railHorizontal {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: none;
+  align-items: center;
+  justify-items: stretch;
+  column-gap: 0.7rem;
+}
+
+.marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  background: var(--surface-panel);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.markerComplete {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--success-strong) 0%, color-mix(in srgb, var(--success-strong) 70%, white) 100%);
+  color: white;
+}
+
+.markerCurrent {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: white;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.markerUpcoming {
+  background: var(--surface-raised);
+  color: var(--text-muted);
+}
+
+.markerWarning {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--warning-strong) 0%, color-mix(in srgb, var(--warning-strong) 72%, white) 100%);
+  color: white;
+}
+
+.markerError {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--danger-strong) 0%, color-mix(in srgb, var(--danger-strong) 72%, white) 100%);
+  color: white;
+}
+
+.connector {
+  width: 2px;
+  min-height: 2.25rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--border-subtle) 72%, var(--surface-card-subtle));
+}
+
+.connectorHorizontal {
+  width: 100%;
+  min-height: 0;
+  height: 1px;
+  align-self: center;
+  background: color-mix(in srgb, var(--border-subtle) 88%, var(--surface-card-subtle));
+}
+
+.content {
+  min-width: 0;
+  padding-top: 0.125rem;
+}
+
+.contentHorizontal {
+  padding-top: 0;
+  padding-right: 1rem;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--layout-gap-sm);
+  min-width: 0;
+}
+
+.primary {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+.stepLabel {
+  color: var(--text-strong);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  min-width: 0;
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+.rowHorizontal {
+  gap: 0.35rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.rowHorizontal .meta {
+  justify-content: flex-start;
+  gap: 0.35rem;
+}
+
+.rowHorizontal .stepLabel {
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.rowHorizontal .description {
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.metaText {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .header,
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .valueLabel,
+  .metaText {
+    text-align: left;
+    white-space: normal;
+  }
+
+  .meta {
+    justify-content: flex-start;
+  }
+
+  .listHorizontal {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .contentHorizontal {
+    padding-right: 0;
+  }
+}

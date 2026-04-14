@@ -1,0 +1,109 @@
+.watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(12rem, 1fr));
+  align-content: center;
+  justify-items: center;
+  gap: 12rem 4rem;
+  padding: 6rem 4rem;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  opacity: 0.06;
+  transform: rotate(-24deg) scale(1.12);
+}
+
+.watermark span {
+  color: var(--text-strong);
+  font-size: clamp(1.4rem, 1.2vw + 1rem, 2.35rem);
+  font-weight: 900;
+  letter-spacing: 0.34em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 12;
+  display: grid;
+  gap: 0.2rem;
+  max-width: min(22rem, calc(100vw - 2rem));
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border-subtle));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface-panel) 92%, var(--surface-raised));
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+
+.badge strong {
+  color: var(--text-strong);
+  font-size: 0.85rem;
+}
+
+.badge span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.notice {
+  position: fixed;
+  left: 50%;
+  bottom: 1.15rem;
+  z-index: 14;
+  min-width: min(28rem, calc(100vw - 2rem));
+  max-width: min(34rem, calc(100vw - 2rem));
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(170, 48, 69, 0.16);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-raised) 92%, #fff3f5);
+  box-shadow: var(--shadow-soft);
+  color: var(--danger-strong);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  transform: translate(-50%, 1rem);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.noticeVisible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 720px) {
+  .watermark {
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
+    gap: 7rem 2rem;
+    padding: 5rem 1.5rem 7rem;
+    transform: rotate(-20deg) scale(1.08);
+  }
+
+  .watermark span {
+    font-size: 1rem;
+    letter-spacing: 0.24em;
+  }
+
+  .badge {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    max-width: min(18rem, calc(100vw - 1.5rem));
+  }
+
+  .notice {
+    bottom: 4.75rem;
+    min-width: min(22rem, calc(100vw - 1.5rem));
+    border-radius: 1rem;
+  }
+}

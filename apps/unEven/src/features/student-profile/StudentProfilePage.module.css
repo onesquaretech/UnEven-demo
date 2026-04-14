@@ -1,0 +1,401 @@
+.shell {
+  min-height: 100vh;
+}
+
+.page {
+  display: grid;
+  gap: 1.375rem;
+}
+
+.workspaceBody {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
+}
+
+.headerActions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+}
+
+.actionGlyph {
+  position: relative;
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.actionGlyph::before,
+.actionGlyph::after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.actionGlyphtransfer::before {
+  left: 0.16rem;
+  top: 0.2rem;
+  width: 0.52rem;
+  height: 0.52rem;
+  border-top: 1.8px solid currentColor;
+  border-right: 1.8px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.actionGlyphtransfer::after {
+  left: 0.14rem;
+  right: 0.22rem;
+  top: 0.46rem;
+  height: 0.08rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.actionGlyphedit::before {
+  left: 0.18rem;
+  top: 0.56rem;
+  width: 0.62rem;
+  height: 0.1rem;
+  border-radius: 999px;
+  background: currentColor;
+  transform: rotate(-45deg);
+}
+
+.actionGlyphedit::after {
+  right: 0.1rem;
+  top: 0.14rem;
+  width: 0.26rem;
+  height: 0.26rem;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.summaryCard,
+.infoCard,
+.sideCard,
+.transportCard,
+.activityCard {
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.summaryContent {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(22rem, 1fr);
+  align-items: center;
+}
+
+.identityBlock {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.identityAvatar {
+  flex: 0 0 auto;
+  width: 5.25rem;
+  height: 5.25rem;
+  border-radius: 999px;
+}
+
+.identityCopy {
+  display: grid;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.identityHeading {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.identityHeading h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.identityHeading p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.identityChips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.metricGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metricCard {
+  min-height: 5.75rem;
+}
+
+.metricCardBody {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.metricLabel {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.metricValue {
+  color: var(--text-strong);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.metricMeta {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.contentGrid {
+  display: grid;
+  margin-top: 1rem;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.48fr) minmax(19rem, 0.9fr);
+  align-items: start;
+}
+
+.primaryColumn,
+.secondaryColumn {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.infoFieldsGrid {
+  display: grid;
+  gap: 1.25rem 1.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.detailItem {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.detailLabel {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.detailValue,
+.guardianName,
+.attendanceValue,
+.feeMetricValue,
+.transportValue,
+.footerFieldValue {
+  color: var(--text-strong);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.infoDivider {
+  height: 1px;
+  margin: 1.15rem 0 0.95rem;
+  background: var(--border-subtle);
+}
+
+.fullWidthField .detailItem {
+  width: 100%;
+}
+
+.fullWidthField .detailValue {
+  font-weight: 500;
+}
+
+.footerFieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.15rem;
+}
+
+.guardianGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.guardianCard {
+  min-height: 5.5rem;
+}
+
+.guardianBody {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.guardianMeta {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.attendanceBody {
+  display: grid;
+  gap: 1.15rem;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.attendanceMeter {
+  align-self: center;
+}
+
+.attendanceStats {
+  display: grid;
+  gap: 1rem 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.attendanceStat {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.feeMetricGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.feeMetricCard {
+  min-height: 4.75rem;
+}
+
+.feeMetricBody {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sideNote {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.documentsList {
+  margin-top: 0.1rem;
+}
+
+.footerGrid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr);
+  align-items: stretch;
+}
+
+.transportBody {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.transportNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.activityFeed {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.activityDot {
+  display: inline-flex;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.activityDotAlt {
+  background: var(--accent-2);
+}
+
+@media (max-width: 1180px) {
+  .summaryContent,
+  .contentGrid,
+  .footerGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .infoFieldsGrid,
+  .guardianGrid,
+  .feeMetricGrid,
+  .attendanceStats,
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .attendanceBody {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .workspaceBody {
+    padding: 1rem;
+    border-radius: 1.25rem;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .headerActions > * {
+    flex: 1 1 100%;
+  }
+
+  .identityBlock {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .infoFieldsGrid,
+  .guardianGrid,
+  .feeMetricGrid,
+  .attendanceStats,
+  .metricGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
