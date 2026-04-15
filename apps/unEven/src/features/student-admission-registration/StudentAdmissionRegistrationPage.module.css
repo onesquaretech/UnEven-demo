@@ -106,7 +106,7 @@
 .contentGrid {
   display: grid;
   gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 3fr) minmax(17rem, 0.92fr);
   align-items: start;
 }
 
