@@ -49,7 +49,7 @@ const navigation: BasicReportViewModel["navigation"] = [
 
 export const basicReportViewModelFixture: BasicReportViewModel = {
   tenant: basicReportTenant,
-  title: "Basic Reports",
+  title: "Reports",
   description: "Access essential school reports without advanced analytics complexity",
   navigation,
   exportActions: {
