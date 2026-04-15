@@ -52,12 +52,11 @@ export function normalizeRoute(pathname: string): AppRoute {
   return defaultAppRoute;
 }
 
-export function getAppRouterBasename(locationLike: Pick<Location, "hostname" | "pathname">): string {
-  if (!locationLike.hostname.endsWith(".github.io")) {
+export function getAppRouterBasename(baseUrl: string): string {
+  if (!baseUrl || baseUrl === "/") {
     return "/";
   }
 
-  const [, firstSegment] = locationLike.pathname.split("/");
-
-  return firstSegment ? `/${firstSegment}` : "/";
+  const trimmedBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+  return trimmedBaseUrl || "/";
 }
