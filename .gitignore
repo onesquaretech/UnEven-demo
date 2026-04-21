@@ -18,6 +18,9 @@
 /apps/unEven/public/*
 !/apps/unEven/public/404.html
 !/apps/unEven/public/.nojekyll
+!/apps/unEven/public/favicon.ico
+!/apps/unEven/public/brand/
+!/apps/unEven/public/brand/app_logo.png
 !/apps/unEven/index.html
 !/apps/unEven/package.json
 !/apps/unEven/package-lock.json
