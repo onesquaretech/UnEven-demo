@@ -127,7 +127,7 @@ export function LoginPage() {
       <img
         alt={`${viewModel.tenant.display.shortName ?? viewModel.tenant.display.displayName} logo`}
         className={styles.brandLogo}
-        src={viewModel.tenant.branding?.logoSrc ?? "/brand/app_logo.png"}
+        src={viewModel.tenant.branding?.logoSrc ?? `${import.meta.env.BASE_URL}brand/app_logo.png`}
       />
       <div className={styles.brandTitleRow}>
         <strong className={styles.brandTitle}>Academy Network</strong>

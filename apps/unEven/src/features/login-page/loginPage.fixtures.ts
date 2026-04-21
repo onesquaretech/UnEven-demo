@@ -5,6 +5,8 @@ import type {
   LoginRoleCode
 } from "./loginPage.types";
 
+const publicAssetPath = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 export const loginPageTenant: LoginPageViewModel["tenant"] = {
   tenantId: "tenant_uneven_demo",
   display: {
@@ -20,8 +22,8 @@ export const loginPageTenant: LoginPageViewModel["tenant"] = {
   branding: {
     primaryColor: "#0f7a6c",
     accentColor: "#d76534",
-    logoSrc: "/brand/app_logo.png",
-    iconSrc: "/favicon.svg"
+    logoSrc: publicAssetPath("brand/app_logo.png"),
+    iconSrc: publicAssetPath("favicon.ico")
   },
   contact: {
     email: "access@uneven.school",
