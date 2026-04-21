@@ -19,7 +19,9 @@ export const loginPageTenant: LoginPageViewModel["tenant"] = {
   enabledModules: ["dashboard", "students", "attendance", "fees", "notices"],
   branding: {
     primaryColor: "#0f7a6c",
-    accentColor: "#d76534"
+    accentColor: "#d76534",
+    logoSrc: "/brand/app_logo.png",
+    iconSrc: "/favicon.svg"
   },
   contact: {
     email: "access@uneven.school",

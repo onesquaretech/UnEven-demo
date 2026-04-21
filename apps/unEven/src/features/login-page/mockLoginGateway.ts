@@ -17,7 +17,7 @@ export async function submitMockLogin(command: LoginFormCommand): Promise<LoginA
       error: {
         code: "INVALID_CREDENTIALS",
         title: "Invalid school code",
-        message: "The school code does not match the configured tenant for this demo login."
+        message: "The school code does not match."
       }
     };
   }

@@ -122,19 +122,22 @@ export function LoginPage() {
     setError(result.error);
   }
 
+  const brandRibbon = (
+    <div className={styles.brandRibbon}>
+      <img
+        alt={`${viewModel.tenant.display.shortName ?? viewModel.tenant.display.displayName} logo`}
+        className={styles.brandLogo}
+        src={viewModel.tenant.branding?.logoSrc ?? "/brand/app_logo.png"}
+      />
+      <div className={styles.brandTitleRow}>
+        <strong className={styles.brandTitle}>Academy Network</strong>
+        <span className={styles.planChip}>{viewModel.planLabel}</span>
+      </div>
+    </div>
+  );
+
   const marketingPanel = (
     <div className={styles.marketingPanel}>
-      <div className={styles.brandRibbon}>
-        <div aria-hidden="true" className={styles.brandMark}>
-          <span className={styles.brandMarkPrimary} />
-          <span className={styles.brandMarkSecondary} />
-        </div>
-        <div className={styles.brandTitleRow}>
-          <strong className={styles.brandTitle}>{viewModel.tenant.display.displayName}</strong>
-          <span className={styles.planChip}>{viewModel.planLabel}</span>
-        </div>
-      </div>
-
       <div className={styles.heroBlock}>
         <h1 className={styles.heroTitle}>
           <span>Run daily school</span>
@@ -194,23 +197,27 @@ export function LoginPage() {
   );
 
   return (
-    <AuthShell
-      authDescription={viewModel.description}
-      authFooter={<p className={styles.footerNote}>{viewModel.footerNote}</p>}
-      brand={<span className={styles.brandSpacer} aria-hidden="true" />}
-      className={styles.shell}
-      authTitle={viewModel.title}
-      marketingFooter={
-        <p className={styles.marketingFooter}>
-          Modern School Management System · {viewModel.planLabel}
-        </p>
-      }
-      marketingPanel={marketingPanel}
-      marketingSurface="plain"
-      shellSurface="plain"
-      stackedSectionOrder="auth-first"
-      viewport={viewport}
-    >
+    <div className={styles.loginFrame}>
+      {viewport === "mobile" ? (
+        <div className={styles.mobileBrandTop}>{brandRibbon}</div>
+      ) : null}
+      <AuthShell
+        authDescription={viewModel.description}
+        authFooter={<p className={styles.footerNote}>{viewModel.footerNote}</p>}
+        brand={viewport === "mobile" ? <span aria-hidden="true" /> : brandRibbon}
+        className={styles.shell}
+        authTitle={viewModel.title}
+        marketingFooter={
+          <p className={styles.marketingFooter}>
+            Modern School Management System · {viewModel.planLabel}
+          </p>
+        }
+        marketingPanel={marketingPanel}
+        marketingSurface="plain"
+        shellSurface="plain"
+        stackedSectionOrder="auth-first"
+        viewport={viewport}
+      >
       <div className={styles.content}>
         <section className={styles.formSection}>
           <form className={styles.form} onSubmit={handleSubmit}>
@@ -313,7 +320,7 @@ export function LoginPage() {
             {error ? (
               <Card className={cx(styles.feedbackCard, styles.feedbackDanger)} elevation="subtle">
                 <div className={styles.feedbackHeader}>
-                  <StatusChip label={error.code} tone="danger" />
+                  <StatusChip label="Error" tone="danger" />
                   <strong>{error.title}</strong>
                 </div>
                 <p className={styles.feedbackText}>{error.message}</p>
@@ -323,7 +330,7 @@ export function LoginPage() {
             {session ? (
               <Card className={cx(styles.feedbackCard, styles.feedbackSuccess)} elevation="subtle">
                 <div className={styles.feedbackHeader}>
-                  <StatusChip label="SESSION_READY" tone="success" />
+                  <StatusChip label="Ready" tone="success" />
                   <strong>{session.displayName}</strong>
                 </div>
                 <p className={styles.feedbackText}>
@@ -360,6 +367,7 @@ export function LoginPage() {
           </form>
         </section>
       </div>
-    </AuthShell>
+      </AuthShell>
+    </div>
   );
 }

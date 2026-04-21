@@ -1,3 +1,11 @@
+.loginFrame {
+  display: contents;
+}
+
+.mobileBrandTop {
+  display: none;
+}
+
 .shell {
   position: relative;
   display: grid;
@@ -114,6 +122,7 @@
 .shell :global([class*="AuthShell_authCard"]) {
   width: 100%;
   max-width: 26.25rem;
+  box-sizing: border-box;
   border: 1px solid #e2e8f0;
   border-radius: 1.5rem;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
@@ -129,6 +138,8 @@
 .content {
   display: grid;
   gap: 0.82rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .marketingPanel {
@@ -142,55 +153,24 @@
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: baseline;
+  gap: 0.45rem;
   min-width: 0;
 }
 
-.brandSpacer {
+.brandLogo {
   display: block;
-  width: 100%;
-  min-height: 0;
-}
-
-.brandMark {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  flex: 0 0 2.75rem;
-  border-radius: 0.75rem;
-  background: #0ea5a4;
-}
-
-.brandMarkPrimary,
-.brandMarkSecondary {
-  position: absolute;
-  display: block;
-  background: rgba(255, 255, 255, 0.94);
-}
-
-.brandMarkPrimary {
-  width: 1.12rem;
-  height: 1.18rem;
-  right: 0.76rem;
-  top: 0.72rem;
-  border-radius: 0.42rem 0.42rem 0.28rem 0.55rem;
-}
-
-.brandMarkSecondary {
-  width: 0.9rem;
-  height: 0.9rem;
-  left: 0.82rem;
-  top: 1rem;
-  border-radius: 0.5rem 0.2rem 0.5rem 0.5rem;
-  opacity: 0.74;
+  width: 6.9rem;
+  flex: 0 0 6.9rem;
+  object-fit: contain;
+  object-position: left center;
+  box-sizing: border-box;
+  transform: translateY(0.18rem);
 }
 
 .brandTitleRow {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.9rem;
   min-width: 0;
   flex-wrap: wrap;
@@ -436,11 +416,15 @@
 
 .formSection {
   display: grid;
+  min-width: 0;
+  width: 100%;
 }
 
 .form {
   display: grid;
   gap: 0.82rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .fieldGroup {
@@ -572,9 +556,20 @@
 }
 
 .feedbackCard {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
   padding: 0.75rem 0.9rem;
+  overflow: hidden;
+}
+
+.feedbackCard :global([class*="Card_content"]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .feedbackDanger {
@@ -590,6 +585,29 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.feedbackHeader strong {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.feedbackHeader :global([class*="StatusChip_chip"]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.feedbackHeader :global([class*="StatusChip_label"]) {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .feedbackText {
@@ -597,6 +615,7 @@
   color: #475569;
   font-size: 0.84rem;
   line-height: 1.42;
+  overflow-wrap: anywhere;
 }
 
 .permissionList {
@@ -604,17 +623,21 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.75rem;
+  min-width: 0;
 }
 
 .permissionPill {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
+  max-width: 100%;
   border-radius: 999px;
   background: #ecfeff;
   color: #0f766e;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.28rem 0.58rem;
+  overflow-wrap: anywhere;
 }
 
 .inlineDivider {
@@ -711,7 +734,53 @@
 }
 
 @media (max-width: 720px) {
+  .loginFrame {
+    display: grid;
+    min-height: 100vh;
+    background: #f8fafc;
+  }
+
+  .mobileBrandTop {
+    position: relative;
+    z-index: 2;
+    display: block;
+    padding: 1.15rem 1.5rem 0;
+  }
+
+  .mobileBrandTop .brandRibbon {
+    width: 100%;
+    align-items: baseline;
+    gap: 0.38rem;
+    flex-wrap: nowrap;
+  }
+
+  .mobileBrandTop .brandLogo {
+    width: 5.9rem;
+    flex-basis: 5.9rem;
+  }
+
+  .mobileBrandTop .brandTitleRow {
+    flex: 1 1 auto;
+    align-items: flex-start;
+    gap: 0.42rem;
+    flex-wrap: nowrap;
+  }
+
+  .mobileBrandTop .brandTitle {
+    font-size: 1.08rem;
+    line-height: 1.12;
+  }
+
+  .mobileBrandTop .planChip {
+    min-height: 1.35rem;
+    flex: 0 0 auto;
+    padding: 0.18rem 0.5rem;
+    font-size: 0.68rem;
+    transform: translateY(0.12rem);
+  }
+
   .shell {
+    min-height: auto;
     padding: 0;
   }
 
