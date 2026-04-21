@@ -1,5 +1,6 @@
 *
 !/.gitignore
+!/create_school_erp_backend.sh
 
 !/.github/
 /.github/*

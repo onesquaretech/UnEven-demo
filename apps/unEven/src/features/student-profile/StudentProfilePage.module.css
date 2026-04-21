@@ -18,6 +18,11 @@
   background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
 }
 
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .headerActions {
   display: inline-flex;
   flex-wrap: wrap;
@@ -369,6 +374,18 @@
   .attendanceBody {
     grid-template-columns: minmax(0, 1fr);
     justify-items: start;
+  }
+}
+
+@media (max-width: 720px) {
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
+  }
+
+  .contentGrid {
+    margin-top: 0;
   }
 }
 

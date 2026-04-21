@@ -103,6 +103,15 @@
   width: 100%;
 }
 
+.mobileProgressStrip {
+  display: none;
+}
+
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .contentGrid {
   display: grid;
   gap: 1.25rem;
@@ -355,6 +364,45 @@
   .workspaceBody {
     padding: 1rem;
     border-radius: 1.2rem;
+  }
+
+  .mobileProgressStrip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    background: var(--surface-card-subtle);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .mobileProgressStrip strong {
+    color: var(--text-strong);
+    font-weight: 800;
+  }
+
+  .mobileProgressDivider {
+    width: 0.22rem;
+    height: 0.22rem;
+    border-radius: 999px;
+    background: var(--border-strong);
+    flex: 0 0 auto;
+  }
+
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
   }
 
   .headerActions,

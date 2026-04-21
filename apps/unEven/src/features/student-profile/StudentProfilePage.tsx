@@ -9,7 +9,8 @@ import {
   CircularProgress,
   FileUploadList,
   PageHeader,
-  StatusChip
+  StatusChip,
+  Tabs
 } from "../../ui";
 import type { ThemeMode } from "../../ui";
 import { buildBackOfficeNavigation } from "../../app/navigation";
@@ -74,6 +75,27 @@ function renderGuardianCard(guardian: StudentProfileGuardianCard) {
   );
 }
 
+type StudentProfileMobileSection =
+  | "personal"
+  | "academic"
+  | "guardian"
+  | "attendance"
+  | "fees"
+  | "documents"
+  | "transport"
+  | "activity";
+
+const mobileSections: Array<{ value: StudentProfileMobileSection; label: string }> = [
+  { value: "personal", label: "Personal" },
+  { value: "academic", label: "Academic" },
+  { value: "guardian", label: "Guardian" },
+  { value: "attendance", label: "Attendance" },
+  { value: "fees", label: "Fees" },
+  { value: "documents", label: "Documents" },
+  { value: "transport", label: "Transport" },
+  { value: "activity", label: "Activity" }
+];
+
 export interface StudentProfilePageProps {
   themeMode?: ThemeMode;
   onThemeToggle?: () => void;
@@ -90,6 +112,7 @@ export function StudentProfilePage(props: StudentProfilePageProps = {}) {
     return detectViewport(window.innerWidth);
   });
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const [activeMobileSection, setActiveMobileSection] = useState<StudentProfileMobileSection>("personal");
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -107,6 +130,246 @@ export function StudentProfilePage(props: StudentProfilePageProps = {}) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const isMobile = viewport === "mobile";
+
+  function renderSummaryCard() {
+    return (
+      <Card className={styles.summaryCard} elevation="raised" padding="lg">
+        <div className={styles.summaryContent}>
+          <div className={styles.identityBlock}>
+            <AvatarBadge
+              className={styles.identityAvatar}
+              colorSeed={viewModel.identity.avatarSeed}
+              name={viewModel.identity.studentName}
+              size="lg"
+            />
+
+            <div className={styles.identityCopy}>
+              <div className={styles.identityHeading}>
+                <h2>{viewModel.identity.studentName}</h2>
+                <p>
+                  Admission No. {viewModel.identity.admissionNumber} · Roll No.{" "}
+                  {viewModel.identity.rollNumber} · {viewModel.identity.classLabel}
+                </p>
+              </div>
+
+              <div className={styles.identityChips}>
+                {viewModel.identity.statusChips.map((chip) => (
+                  <StatusChip key={chip.id} label={chip.label} size="sm" tone={chip.tone} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.metricGrid}>
+            {viewModel.identity.summaryMetrics.map(renderMetric)}
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderPersonalInfoCard() {
+    return (
+      <Card
+        className={styles.infoCard}
+        description={viewModel.personalInfo.description}
+        title={viewModel.personalInfo.title}
+      >
+        <div className={styles.infoFieldsGrid}>
+          {viewModel.personalInfo.fields.map(renderField)}
+        </div>
+        <div className={styles.infoDivider} />
+        <div className={styles.fullWidthField}>{renderField(viewModel.personalInfo.fullWidthField)}</div>
+      </Card>
+    );
+  }
+
+  function renderAcademicInfoCard() {
+    return (
+      <Card
+        className={styles.infoCard}
+        description={viewModel.academicInfo.description}
+        title={viewModel.academicInfo.title}
+      >
+        <div className={styles.infoFieldsGrid}>
+          {viewModel.academicInfo.fields.map(renderField)}
+        </div>
+        <div className={styles.infoDivider} />
+        <div className={styles.footerFieldRow}>
+          <span className={styles.detailLabel}>{viewModel.academicInfo.footerField.label}</span>
+          <strong className={styles.footerFieldValue}>
+            {viewModel.academicInfo.footerField.value}
+          </strong>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderGuardianInfoCard() {
+    return (
+      <Card
+        className={styles.infoCard}
+        description={viewModel.guardianInfo.description}
+        title={viewModel.guardianInfo.title}
+      >
+        <div className={styles.guardianGrid}>
+          {viewModel.guardianInfo.guardians.map(renderGuardianCard)}
+        </div>
+      </Card>
+    );
+  }
+
+  function renderAttendanceCard() {
+    return (
+      <Card
+        className={styles.sideCard}
+        description="Current month attendance view"
+        title="Attendance Summary"
+      >
+        <div className={styles.attendanceBody}>
+          <CircularProgress
+            centerLabel={viewModel.attendanceSummary.valueLabel}
+            className={styles.attendanceMeter}
+            size="lg"
+            tone="accent"
+            value={viewModel.attendanceSummary.percentage}
+          />
+
+          <div className={styles.attendanceStats}>
+            {viewModel.attendanceSummary.stats.map((item) => (
+              <div className={styles.attendanceStat} key={item.id}>
+                <span className={styles.detailLabel}>{item.label}</span>
+                <strong className={styles.attendanceValue}>{item.value}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderFeeCard() {
+    return (
+      <Card
+        className={styles.sideCard}
+        description={viewModel.feeSummary.description}
+        title={viewModel.feeSummary.title}
+      >
+        <div className={styles.feeMetricGrid}>
+          {viewModel.feeSummary.metrics.map((metric) => (
+            <Card className={styles.feeMetricCard} elevation="subtle" key={metric.id} padding="md">
+              <div className={styles.feeMetricBody}>
+                <span className={styles.detailLabel}>{metric.label}</span>
+                <strong className={styles.feeMetricValue}>{metric.value}</strong>
+              </div>
+            </Card>
+          ))}
+        </div>
+        <p className={styles.sideNote}>{viewModel.feeSummary.footerNote}</p>
+      </Card>
+    );
+  }
+
+  function renderDocumentsCard() {
+    return (
+      <Card className={styles.sideCard} title="Uploaded Documents">
+        <FileUploadList className={styles.documentsList} items={viewModel.documents} />
+      </Card>
+    );
+  }
+
+  function renderTransportCard() {
+    return (
+      <Card className={styles.transportCard} title={viewModel.transport.title}>
+        <div className={styles.transportBody}>
+          <strong className={styles.transportValue}>{viewModel.transport.detail}</strong>
+          <p className={styles.transportNote}>{viewModel.transport.note}</p>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderActivityCard() {
+    return (
+      <Card className={styles.activityCard} title="Recent Activity">
+        <ActivityFeed
+          className={styles.activityFeed}
+          compact
+          items={viewModel.activity.map((item, index) => ({
+            ...item,
+            leading: (
+              <span
+                aria-hidden="true"
+                className={cx(
+                  styles.activityDot,
+                  index === 1 && styles.activityDotAlt
+                )}
+              />
+            )
+          }))}
+        />
+      </Card>
+    );
+  }
+
+  function renderDesktopWorkspace() {
+    return (
+      <>
+        <div className={styles.contentGrid}>
+          <div className={styles.primaryColumn}>
+            {renderPersonalInfoCard()}
+            {renderAcademicInfoCard()}
+            {renderGuardianInfoCard()}
+          </div>
+
+          <div className={styles.secondaryColumn}>
+            {renderAttendanceCard()}
+            {renderFeeCard()}
+            {renderDocumentsCard()}
+          </div>
+        </div>
+
+        <div className={styles.footerGrid}>
+          {renderTransportCard()}
+          {renderActivityCard()}
+        </div>
+      </>
+    );
+  }
+
+  function renderMobileWorkspace() {
+    if (activeMobileSection === "attendance") {
+      return renderAttendanceCard();
+    }
+
+    if (activeMobileSection === "academic") {
+      return renderAcademicInfoCard();
+    }
+
+    if (activeMobileSection === "guardian") {
+      return renderGuardianInfoCard();
+    }
+
+    if (activeMobileSection === "fees") {
+      return renderFeeCard();
+    }
+
+    if (activeMobileSection === "documents") {
+      return renderDocumentsCard();
+    }
+
+    if (activeMobileSection === "transport") {
+      return renderTransportCard();
+    }
+
+    if (activeMobileSection === "activity") {
+      return renderActivityCard();
+    }
+
+    return renderPersonalInfoCard();
+  }
 
   return (
     <BackOfficeShell
@@ -155,158 +418,25 @@ export function StudentProfilePage(props: StudentProfilePageProps = {}) {
         />
 
         <Card className={styles.workspaceBody} elevation="subtle" padding="lg">
-          <Card className={styles.summaryCard} elevation="raised" padding="lg">
-            <div className={styles.summaryContent}>
-              <div className={styles.identityBlock}>
-                <AvatarBadge
-                  className={styles.identityAvatar}
-                  colorSeed={viewModel.identity.avatarSeed}
-                  name={viewModel.identity.studentName}
-                  size="lg"
-                />
+          {renderSummaryCard()}
 
-                <div className={styles.identityCopy}>
-                  <div className={styles.identityHeading}>
-                    <h2>{viewModel.identity.studentName}</h2>
-                    <p>
-                      Admission No. {viewModel.identity.admissionNumber} · Roll No.{" "}
-                      {viewModel.identity.rollNumber} · {viewModel.identity.classLabel}
-                    </p>
-                  </div>
-
-                  <div className={styles.identityChips}>
-                    {viewModel.identity.statusChips.map((chip) => (
-                      <StatusChip key={chip.id} label={chip.label} size="sm" tone={chip.tone} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.metricGrid}>
-                {viewModel.identity.summaryMetrics.map(renderMetric)}
-              </div>
-            </div>
-          </Card>
-
-          <div className={styles.contentGrid}>
-            <div className={styles.primaryColumn}>
-              <Card
-                className={styles.infoCard}
-                description={viewModel.personalInfo.description}
-                title={viewModel.personalInfo.title}
-              >
-                <div className={styles.infoFieldsGrid}>
-                  {viewModel.personalInfo.fields.map(renderField)}
-                </div>
-                <div className={styles.infoDivider} />
-                <div className={styles.fullWidthField}>{renderField(viewModel.personalInfo.fullWidthField)}</div>
-              </Card>
-
-              <Card
-                className={styles.infoCard}
-                description={viewModel.academicInfo.description}
-                title={viewModel.academicInfo.title}
-              >
-                <div className={styles.infoFieldsGrid}>
-                  {viewModel.academicInfo.fields.map(renderField)}
-                </div>
-                <div className={styles.infoDivider} />
-                <div className={styles.footerFieldRow}>
-                  <span className={styles.detailLabel}>{viewModel.academicInfo.footerField.label}</span>
-                  <strong className={styles.footerFieldValue}>
-                    {viewModel.academicInfo.footerField.value}
-                  </strong>
-                </div>
-              </Card>
-
-              <Card
-                className={styles.infoCard}
-                description={viewModel.guardianInfo.description}
-                title={viewModel.guardianInfo.title}
-              >
-                <div className={styles.guardianGrid}>
-                  {viewModel.guardianInfo.guardians.map(renderGuardianCard)}
-                </div>
-              </Card>
-            </div>
-
-            <div className={styles.secondaryColumn}>
-              <Card
-                className={styles.sideCard}
-                description="Current month attendance view"
-                title="Attendance Summary"
-              >
-                <div className={styles.attendanceBody}>
-                  <CircularProgress
-                    centerLabel={viewModel.attendanceSummary.valueLabel}
-                    className={styles.attendanceMeter}
-                    size="lg"
-                    tone="accent"
-                    value={viewModel.attendanceSummary.percentage}
-                  />
-
-                  <div className={styles.attendanceStats}>
-                    {viewModel.attendanceSummary.stats.map((item) => (
-                      <div className={styles.attendanceStat} key={item.id}>
-                        <span className={styles.detailLabel}>{item.label}</span>
-                        <strong className={styles.attendanceValue}>{item.value}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-
-              <Card
-                className={styles.sideCard}
-                description={viewModel.feeSummary.description}
-                title={viewModel.feeSummary.title}
-              >
-                <div className={styles.feeMetricGrid}>
-                  {viewModel.feeSummary.metrics.map((metric) => (
-                    <Card className={styles.feeMetricCard} elevation="subtle" key={metric.id} padding="md">
-                      <div className={styles.feeMetricBody}>
-                        <span className={styles.detailLabel}>{metric.label}</span>
-                        <strong className={styles.feeMetricValue}>{metric.value}</strong>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-                <p className={styles.sideNote}>{viewModel.feeSummary.footerNote}</p>
-              </Card>
-
-              <Card className={styles.sideCard} title="Uploaded Documents">
-                <FileUploadList className={styles.documentsList} items={viewModel.documents} />
-              </Card>
-            </div>
-          </div>
-
-          <div className={styles.footerGrid}>
-            <Card className={styles.transportCard} title={viewModel.transport.title}>
-              <div className={styles.transportBody}>
-                <strong className={styles.transportValue}>{viewModel.transport.detail}</strong>
-                <p className={styles.transportNote}>{viewModel.transport.note}</p>
-              </div>
-            </Card>
-
-            <Card className={styles.activityCard} title="Recent Activity">
-              <ActivityFeed
-                className={styles.activityFeed}
-                compact
-                items={viewModel.activity.map((item, index) => ({
-                  ...item,
-                  leading: (
-                    <span
-                      aria-hidden="true"
-                      className={cx(
-                        styles.activityDot,
-                        index === 1 && styles.activityDotAlt
-                      )}
-                    />
-                  )
-                }))}
+          {isMobile ? (
+            <>
+              <Tabs
+                activeValue={activeMobileSection}
+                aria-label="Student profile mobile sections"
+                className={styles.mobileSectionTabs}
+                items={mobileSections}
+                size="sm"
+                onValueChange={(value) => {
+                  setActiveMobileSection(value as StudentProfileMobileSection);
+                }}
               />
-            </Card>
-          </div>
+              {renderMobileWorkspace()}
+            </>
+          ) : (
+            renderDesktopWorkspace()
+          )}
         </Card>
       </div>
     </BackOfficeShell>

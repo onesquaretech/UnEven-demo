@@ -18,6 +18,11 @@
   background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
 }
 
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .headerActions {
   display: inline-flex;
   flex-wrap: wrap;
@@ -443,6 +448,11 @@
   justify-content: flex-end;
 }
 
+.mobileActionStack {
+  display: grid;
+  gap: 1rem;
+}
+
 @media (max-width: 1120px) {
   .contentGrid {
     grid-template-columns: 1fr;
@@ -460,8 +470,19 @@
     border-radius: 1.2rem;
   }
 
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
+  }
+
   .headerActions {
     width: 100%;
+    display: none;
+  }
+
+  .mobileActionStack .headerActions {
+    display: flex;
   }
 
   .modalFields {

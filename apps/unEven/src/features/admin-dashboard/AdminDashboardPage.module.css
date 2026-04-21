@@ -18,6 +18,11 @@
   background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
 }
 
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .navGlyph,
 .metricGlyph,
 .quickActionGlyph {
@@ -846,6 +851,12 @@
     border-radius: 1.2rem;
   }
 
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
+  }
+
   .metricsGrid {
     grid-template-columns: 1fr;
   }
@@ -866,6 +877,11 @@
 
   .yearBadge {
     width: 100%;
+  }
+
+  .admissionCard .searchCluster,
+  .noticeCard .searchCluster {
+    min-width: min(100%, 18rem);
   }
 
   .priorityNote {

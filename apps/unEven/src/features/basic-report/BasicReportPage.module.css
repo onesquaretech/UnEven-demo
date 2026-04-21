@@ -18,6 +18,11 @@
   background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
 }
 
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .headerActions {
   display: inline-flex;
   flex-wrap: wrap;
@@ -242,6 +247,11 @@
   gap: 0.7rem;
 }
 
+.mobileActionStack {
+  display: grid;
+  gap: 1rem;
+}
+
 .iconGlyph {
   position: relative;
   display: inline-flex;
@@ -383,6 +393,20 @@
   .workspaceBody {
     padding: 1rem;
     border-radius: 1.2rem;
+  }
+
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
+  }
+
+  .headerActions {
+    width: 100%;
+  }
+
+  .headerActions :global(button) {
+    flex: 1 1 100%;
   }
 
   .metricsGrid,

@@ -9,13 +9,35 @@ import {
   FilterBar,
   PageHeader,
   ProgressBar,
-  StatusChip
+  StatusChip,
+  Tabs
 } from "../../ui";
 import type { DataTableColumn, ThemeMode } from "../../ui";
 import { buildBackOfficeNavigation } from "../../app/navigation";
 import { buildBasicTransportManagementViewModel } from "./buildBasicTransportManagementViewModel";
 import type { BasicTransportAssignmentRow } from "./basicTransportManagement.types";
 import styles from "./BasicTransportManagementPage.module.css";
+
+type BasicTransportMobileSection =
+  | "routes"
+  | "filters"
+  | "students"
+  | "vehicle"
+  | "capacity"
+  | "stops"
+  | "fees"
+  | "actions";
+
+const mobileSections: Array<{ value: BasicTransportMobileSection; label: string }> = [
+  { value: "routes", label: "Routes" },
+  { value: "filters", label: "Filters" },
+  { value: "students", label: "Students" },
+  { value: "vehicle", label: "Vehicle" },
+  { value: "capacity", label: "Capacity" },
+  { value: "stops", label: "Stops" },
+  { value: "fees", label: "Fees" },
+  { value: "actions", label: "Actions" }
+];
 
 function cx(...tokens: Array<string | false | null | undefined>) {
   return tokens.filter(Boolean).join(" ");
@@ -91,6 +113,8 @@ export function BasicTransportManagementPage(props: BasicTransportManagementPage
     return detectViewport(window.innerWidth);
   });
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const [activeMobileSection, setActiveMobileSection] =
+    useState<BasicTransportMobileSection>("routes");
   const [searchQuery, setSearchQuery] = useState(viewModel.filters.searchValue);
   const [routeFilter, setRouteFilter] = useState(viewModel.filters.routeValue);
   const [classValue, setClassValue] = useState(viewModel.filters.classValue);
@@ -171,6 +195,7 @@ export function BasicTransportManagementPage(props: BasicTransportManagementPage
       return true;
     });
   }, [activeRoute, classValue, feeValue, pickupPointValue, searchQuery]);
+  const isMobile = viewport === "mobile";
 
   function updatePickupPoint(rowId: string, value: string) {
     if (!activeRoute) {
@@ -266,6 +291,351 @@ export function BasicTransportManagementPage(props: BasicTransportManagementPage
     return null;
   }
 
+  function renderFilterCard() {
+    return (
+      <Card className={styles.filterCard} padding="lg">
+        <FilterBar className={styles.filterBar}>
+          <div className={styles.searchField}>
+            <Field
+              label="Search"
+              placeholder={viewModel.filters.searchPlaceholder}
+              value={searchQuery}
+              inputProps={{
+                onChange: updateTextValue(setSearchQuery)
+              }}
+            />
+          </div>
+          <div className={styles.filterField}>
+            <Field
+              label="Route"
+              options={viewModel.filters.routeOptions}
+              type="select"
+              value={routeFilter}
+              selectProps={{
+                onChange: updateSelectValue(setRouteFilter)
+              }}
+            />
+          </div>
+          <div className={styles.filterField}>
+            <Field
+              label="Class"
+              options={viewModel.filters.classOptions}
+              type="select"
+              value={classValue}
+              selectProps={{
+                onChange: updateSelectValue(setClassValue)
+              }}
+            />
+          </div>
+          <div className={styles.filterField}>
+            <Field
+              label="Pickup Point"
+              options={viewModel.filters.pickupPointOptions}
+              type="select"
+              value={pickupPointValue}
+              selectProps={{
+                onChange: updateSelectValue(setPickupPointValue)
+              }}
+            />
+          </div>
+          <div className={styles.filterField}>
+            <Field
+              label="Fee Mapping"
+              options={viewModel.filters.feeOptions}
+              type="select"
+              value={feeValue}
+              selectProps={{
+                onChange: updateSelectValue(setFeeValue)
+              }}
+            />
+          </div>
+        </FilterBar>
+        <p className={styles.filterSummary}>{viewModel.filters.summaryLabel}</p>
+      </Card>
+    );
+  }
+
+  function renderRouteRailCard() {
+    return (
+      <Card
+        className={styles.routeRail}
+        description={viewModel.routeRail.description}
+        padding="lg"
+        title={viewModel.routeRail.title}
+      >
+        <div className={styles.routeStack}>
+          {routeCards.map((route) => (
+            <button
+              className={cx(styles.routeCard, route.id === activeRoute.id && styles.routeCardActive)}
+              key={route.id}
+              type="button"
+              onClick={() => {
+                setActiveRouteId(route.id);
+              }}
+            >
+              <div className={styles.routeCardCopy}>
+                <strong>{route.label}</strong>
+                <span>{route.vehicleLabel}</span>
+              </div>
+              <div className={styles.routeProgressWrap}>
+                <ProgressBar
+                  className={styles.routeProgress}
+                  max={route.capacityValue}
+                  size="sm"
+                  tone={route.tone}
+                  value={route.occupiedValue}
+                />
+                <span className={styles.routeProgressValue}>
+                  {route.occupiedValue} / {route.capacityValue}
+                </span>
+              </div>
+            </button>
+          ))}
+
+          <Card className={styles.routeStatusCard} elevation="subtle" padding="md">
+            <div className={styles.routeStatusBody}>
+              <span>{viewModel.routeRail.statusCardTitle}</span>
+              <strong>{viewModel.routeRail.statusCardValue}</strong>
+              <p>{viewModel.routeRail.statusCardNote}</p>
+            </div>
+          </Card>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderAssignmentTableCard() {
+    return (
+      <Card
+        className={styles.tableCard}
+        description={viewModel.assignmentTable.description}
+        padding="lg"
+        title={viewModel.assignmentTable.title}
+      >
+        <div className={styles.tableStack}>
+          <DataTable
+            className={styles.dataTable}
+            columns={columns}
+            rowKey="id"
+            rows={filteredRows}
+          />
+        </div>
+      </Card>
+    );
+  }
+
+  function renderFeeMappingCard() {
+    return (
+      <Card className={styles.feeMappingCard} elevation="subtle" padding="md">
+        <div className={styles.feeMappingBody}>
+          <div>
+            <span>{viewModel.assignmentTable.feeMappingTitle}</span>
+            <strong>{viewModel.assignmentTable.feeMappingValue}</strong>
+            <p>{viewModel.assignmentTable.feeMappingNote}</p>
+          </div>
+          <Button label={viewModel.assignmentTable.feeMappingActionLabel} variant="secondary" />
+        </div>
+      </Card>
+    );
+  }
+
+  function renderVehicleCard() {
+    return (
+      <Card className={styles.vehicleCard} elevation="subtle" padding="md">
+        <div className={styles.vehicleBody}>
+          <span>{viewModel.detailsPanel.vehicleCardTitle}</span>
+          <strong>{activeRoute.vehicleNumber}</strong>
+          <p>{activeRoute.vehicleMeta}</p>
+          <p>Capacity: {activeRoute.capacityValue} seats</p>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderCapacityCard() {
+    return (
+      <>
+        <div className={styles.sectionLabel}>{viewModel.detailsPanel.capacityTitle}</div>
+        <Card className={styles.capacityCard} elevation="subtle" padding="md">
+          <div className={styles.capacityBody}>
+            <span>Assigned students</span>
+            <strong>
+              {activeRoute.assignedValue} / {activeRoute.capacityValue}
+            </strong>
+            <div className={styles.capacityProgressWrap}>
+              <ProgressBar
+                className={styles.capacityProgress}
+                max={activeRoute.capacityValue}
+                size="sm"
+                tone={activeRoute.capacityTone}
+                value={activeRoute.assignedValue}
+              />
+              <span>{activeRoute.seatsLeftLabel}</span>
+            </div>
+          </div>
+        </Card>
+      </>
+    );
+  }
+
+  function renderStopsSection() {
+    return (
+      <>
+        <div className={styles.sectionLabel}>{viewModel.detailsPanel.stopsTitle}</div>
+        <div className={styles.stopStack}>
+          {activeRoute.stops.map((stop) => (
+            <Card
+              className={cx(styles.stopCard, stop.active && styles.stopCardActive)}
+              elevation="subtle"
+              key={stop.id}
+              padding="md"
+            >
+              <div className={styles.stopBody}>
+                <strong>{stop.label}</strong>
+                <span>
+                  {stop.timeLabel} · {stop.studentCountLabel}
+                </span>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  function renderRouteFeeCard() {
+    return (
+      <>
+        <div className={styles.sectionLabel}>{viewModel.detailsPanel.feeTitle}</div>
+        <Card className={styles.routeFeeCard} elevation="subtle" padding="md">
+          <div className={styles.routeFeeBody}>
+            <span>Monthly transport fee</span>
+            <strong>{activeRoute.feeLabel}</strong>
+          </div>
+        </Card>
+      </>
+    );
+  }
+
+  function renderDetailActions() {
+    return (
+      <div className={styles.detailActions}>
+        <Button label={viewModel.detailsPanel.editActionLabel} variant="secondary" />
+        <Button label={viewModel.detailsPanel.saveActionLabel} />
+      </div>
+    );
+  }
+
+  function renderConflictCard() {
+    return (
+      <Card className={styles.conflictCard} elevation="subtle" padding="md">
+        <div className={styles.conflictBody}>
+          <StatusChip
+            label={viewModel.conflictNote.label}
+            size="sm"
+            tone={viewModel.conflictNote.tone}
+          />
+          <p>{viewModel.conflictNote.message}</p>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderDetailCard() {
+    return (
+      <Card
+        className={styles.detailCard}
+        description={viewModel.detailsPanel.description}
+        padding="lg"
+        title={viewModel.detailsPanel.title}
+      >
+        <div className={styles.detailStack}>
+          {renderVehicleCard()}
+          {renderCapacityCard()}
+          {renderStopsSection()}
+          {renderRouteFeeCard()}
+          {renderDetailActions()}
+          {renderConflictCard()}
+        </div>
+      </Card>
+    );
+  }
+
+  function renderDesktopWorkspace() {
+    return (
+      <>
+        {renderFilterCard()}
+
+        <div className={styles.contentGrid}>
+          {renderRouteRailCard()}
+
+          <Card
+            className={styles.tableCard}
+            description={viewModel.assignmentTable.description}
+            padding="lg"
+            title={viewModel.assignmentTable.title}
+          >
+            <div className={styles.tableStack}>
+              <DataTable
+                className={styles.dataTable}
+                columns={columns}
+                rowKey="id"
+                rows={filteredRows}
+              />
+
+              {renderFeeMappingCard()}
+            </div>
+          </Card>
+
+          {renderDetailCard()}
+        </div>
+      </>
+    );
+  }
+
+  function renderMobileWorkspace() {
+    if (activeMobileSection === "filters") {
+      return renderFilterCard();
+    }
+
+    if (activeMobileSection === "students") {
+      return renderAssignmentTableCard();
+    }
+
+    if (activeMobileSection === "vehicle") {
+      return renderVehicleCard();
+    }
+
+    if (activeMobileSection === "capacity") {
+      return renderCapacityCard();
+    }
+
+    if (activeMobileSection === "stops") {
+      return renderStopsSection();
+    }
+
+    if (activeMobileSection === "fees") {
+      return (
+        <div className={styles.mobileSectionStack}>
+          {renderRouteFeeCard()}
+          {renderFeeMappingCard()}
+        </div>
+      );
+    }
+
+    if (activeMobileSection === "actions") {
+      return (
+        <div className={styles.mobileSectionStack}>
+          <Button iconLeft={createIcon("plus")} label={viewModel.primaryActionLabel} />
+          {renderDetailActions()}
+          {renderConflictCard()}
+        </div>
+      );
+    }
+
+    return renderRouteRailCard();
+  }
+
   return (
     <BackOfficeShell
       className={styles.shell}
@@ -293,226 +663,33 @@ export function BasicTransportManagementPage(props: BasicTransportManagementPage
     >
       <div className={styles.page}>
         <PageHeader
-          actions={<Button iconLeft={createIcon("plus")} label={viewModel.primaryActionLabel} />}
+          actions={
+            !isMobile ? (
+              <Button iconLeft={createIcon("plus")} label={viewModel.primaryActionLabel} />
+            ) : null
+          }
           description={viewModel.description}
           title={viewModel.title}
         />
 
         <section className={styles.workspaceBody}>
-          <Card className={styles.filterCard} padding="lg">
-            <FilterBar className={styles.filterBar}>
-              <div className={styles.searchField}>
-                <Field
-                  label="Search"
-                  placeholder={viewModel.filters.searchPlaceholder}
-                  value={searchQuery}
-                  inputProps={{
-                    onChange: updateTextValue(setSearchQuery)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Route"
-                  options={viewModel.filters.routeOptions}
-                  type="select"
-                  value={routeFilter}
-                  selectProps={{
-                    onChange: updateSelectValue(setRouteFilter)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Class"
-                  options={viewModel.filters.classOptions}
-                  type="select"
-                  value={classValue}
-                  selectProps={{
-                    onChange: updateSelectValue(setClassValue)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Pickup Point"
-                  options={viewModel.filters.pickupPointOptions}
-                  type="select"
-                  value={pickupPointValue}
-                  selectProps={{
-                    onChange: updateSelectValue(setPickupPointValue)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Fee Mapping"
-                  options={viewModel.filters.feeOptions}
-                  type="select"
-                  value={feeValue}
-                  selectProps={{
-                    onChange: updateSelectValue(setFeeValue)
-                  }}
-                />
-              </div>
-            </FilterBar>
-            <p className={styles.filterSummary}>{viewModel.filters.summaryLabel}</p>
-          </Card>
-
-          <div className={styles.contentGrid}>
-            <Card
-              className={styles.routeRail}
-              description={viewModel.routeRail.description}
-              padding="lg"
-              title={viewModel.routeRail.title}
-            >
-              <div className={styles.routeStack}>
-                {routeCards.map((route) => (
-                  <button
-                    className={cx(styles.routeCard, route.id === activeRoute.id && styles.routeCardActive)}
-                    key={route.id}
-                    type="button"
-                    onClick={() => {
-                      setActiveRouteId(route.id);
-                    }}
-                  >
-                    <div className={styles.routeCardCopy}>
-                      <strong>{route.label}</strong>
-                      <span>{route.vehicleLabel}</span>
-                    </div>
-                    <div className={styles.routeProgressWrap}>
-                      <ProgressBar
-                        className={styles.routeProgress}
-                        max={route.capacityValue}
-                        size="sm"
-                        tone={route.tone}
-                        value={route.occupiedValue}
-                      />
-                      <span className={styles.routeProgressValue}>
-                        {route.occupiedValue} / {route.capacityValue}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-
-                <Card className={styles.routeStatusCard} elevation="subtle" padding="md">
-                  <div className={styles.routeStatusBody}>
-                    <span>{viewModel.routeRail.statusCardTitle}</span>
-                    <strong>{viewModel.routeRail.statusCardValue}</strong>
-                    <p>{viewModel.routeRail.statusCardNote}</p>
-                  </div>
-                </Card>
-              </div>
-            </Card>
-
-            <Card
-              className={styles.tableCard}
-              description={viewModel.assignmentTable.description}
-              padding="lg"
-              title={viewModel.assignmentTable.title}
-            >
-              <div className={styles.tableStack}>
-                <DataTable
-                  className={styles.dataTable}
-                  columns={columns}
-                  rowKey="id"
-                  rows={filteredRows}
-                />
-
-                <Card className={styles.feeMappingCard} elevation="subtle" padding="md">
-                  <div className={styles.feeMappingBody}>
-                    <div>
-                      <span>{viewModel.assignmentTable.feeMappingTitle}</span>
-                      <strong>{viewModel.assignmentTable.feeMappingValue}</strong>
-                      <p>{viewModel.assignmentTable.feeMappingNote}</p>
-                    </div>
-                    <Button label={viewModel.assignmentTable.feeMappingActionLabel} variant="secondary" />
-                  </div>
-                </Card>
-              </div>
-            </Card>
-
-            <Card
-              className={styles.detailCard}
-              description={viewModel.detailsPanel.description}
-              padding="lg"
-              title={viewModel.detailsPanel.title}
-            >
-              <div className={styles.detailStack}>
-                <Card className={styles.vehicleCard} elevation="subtle" padding="md">
-                  <div className={styles.vehicleBody}>
-                    <span>{viewModel.detailsPanel.vehicleCardTitle}</span>
-                    <strong>{activeRoute.vehicleNumber}</strong>
-                    <p>{activeRoute.vehicleMeta}</p>
-                    <p>Capacity: {activeRoute.capacityValue} seats</p>
-                  </div>
-                </Card>
-
-                <div className={styles.sectionLabel}>{viewModel.detailsPanel.capacityTitle}</div>
-                <Card className={styles.capacityCard} elevation="subtle" padding="md">
-                  <div className={styles.capacityBody}>
-                    <span>Assigned students</span>
-                    <strong>
-                      {activeRoute.assignedValue} / {activeRoute.capacityValue}
-                    </strong>
-                    <div className={styles.capacityProgressWrap}>
-                      <ProgressBar
-                        className={styles.capacityProgress}
-                        max={activeRoute.capacityValue}
-                        size="sm"
-                        tone={activeRoute.capacityTone}
-                        value={activeRoute.assignedValue}
-                      />
-                      <span>{activeRoute.seatsLeftLabel}</span>
-                    </div>
-                  </div>
-                </Card>
-
-                <div className={styles.sectionLabel}>{viewModel.detailsPanel.stopsTitle}</div>
-                <div className={styles.stopStack}>
-                  {activeRoute.stops.map((stop) => (
-                    <Card
-                      className={cx(styles.stopCard, stop.active && styles.stopCardActive)}
-                      elevation="subtle"
-                      key={stop.id}
-                      padding="md"
-                    >
-                      <div className={styles.stopBody}>
-                        <strong>{stop.label}</strong>
-                        <span>
-                          {stop.timeLabel} · {stop.studentCountLabel}
-                        </span>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-
-                <div className={styles.sectionLabel}>{viewModel.detailsPanel.feeTitle}</div>
-                <Card className={styles.routeFeeCard} elevation="subtle" padding="md">
-                  <div className={styles.routeFeeBody}>
-                    <span>Monthly transport fee</span>
-                    <strong>{activeRoute.feeLabel}</strong>
-                  </div>
-                </Card>
-
-                <div className={styles.detailActions}>
-                  <Button label={viewModel.detailsPanel.editActionLabel} variant="secondary" />
-                  <Button label={viewModel.detailsPanel.saveActionLabel} />
-                </div>
-
-                <Card className={styles.conflictCard} elevation="subtle" padding="md">
-                  <div className={styles.conflictBody}>
-                    <StatusChip
-                      label={viewModel.conflictNote.label}
-                      size="sm"
-                      tone={viewModel.conflictNote.tone}
-                    />
-                    <p>{viewModel.conflictNote.message}</p>
-                  </div>
-                </Card>
-              </div>
-            </Card>
-          </div>
+          {isMobile ? (
+            <>
+              <Tabs
+                activeValue={activeMobileSection}
+                aria-label="Transport mobile sections"
+                className={styles.mobileSectionTabs}
+                items={mobileSections}
+                size="sm"
+                onValueChange={(value) => {
+                  setActiveMobileSection(value as BasicTransportMobileSection);
+                }}
+              />
+              {renderMobileWorkspace()}
+            </>
+          ) : (
+            renderDesktopWorkspace()
+          )}
         </section>
       </div>
     </BackOfficeShell>

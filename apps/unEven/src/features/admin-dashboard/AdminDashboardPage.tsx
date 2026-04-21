@@ -8,7 +8,8 @@ import {
   DataList,
   MetricCard,
   PageHeader,
-  StatusChip
+  StatusChip,
+  Tabs
 } from "../../ui";
 import type { ThemeMode } from "../../ui";
 import { buildBackOfficeNavigation } from "../../app/navigation";
@@ -121,6 +122,25 @@ function renderQuickActionIcon(actionId: string) {
   }
 }
 
+type AdminDashboardMobileSection =
+  | "overview"
+  | "attendance"
+  | "fees"
+  | "actions"
+  | "admissions"
+  | "notices"
+  | "capacity";
+
+const mobileSections: Array<{ value: AdminDashboardMobileSection; label: string }> = [
+  { value: "overview", label: "Overview" },
+  { value: "attendance", label: "Attendance" },
+  { value: "fees", label: "Fees" },
+  { value: "actions", label: "Actions" },
+  { value: "admissions", label: "Admissions" },
+  { value: "notices", label: "Notices" },
+  { value: "capacity", label: "Capacity" }
+];
+
 export interface AdminDashboardPageProps {
   themeMode?: ThemeMode;
   onThemeToggle?: () => void;
@@ -137,6 +157,8 @@ export function AdminDashboardPage(props: AdminDashboardPageProps = {}) {
     return detectViewport(window.innerWidth);
   });
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const [activeMobileSection, setActiveMobileSection] =
+    useState<AdminDashboardMobileSection>("overview");
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -186,6 +208,308 @@ export function AdminDashboardPage(props: AdminDashboardPageProps = {}) {
 
   const availablePendingAction = viewModel.pendingActions.find((item) => item.available);
   const pendingActionCount = viewModel.pendingActions.length;
+  const isMobile = viewport === "mobile";
+
+  function renderSearchCluster(placeholder = "Search students, fees, notices") {
+    return (
+      <div className={styles.searchCluster}>
+        <label className={styles.searchField}>
+          <span aria-hidden="true" className={styles.searchIcon} />
+          <input
+            onChange={(event) => {
+              setQuery(event.target.value);
+            }}
+            placeholder={placeholder}
+            type="search"
+            value={query}
+          />
+        </label>
+        <button className={styles.yearBadge} type="button">
+          <span>{viewModel.academicYearLabel}</span>
+          <span aria-hidden="true" className={styles.chevronDown} />
+        </button>
+      </div>
+    );
+  }
+
+  function renderMetricsGrid() {
+    return (
+      <div className={styles.metricsGrid}>
+        {viewModel.metrics.map((metric) => (
+          <MetricCard
+            className={cx(styles.metricCard, mapMetricTone(metric))}
+            elevation="raised"
+            icon={mapMetricIcon(metric.id)}
+            key={metric.id}
+            label={metric.label}
+            meta={metric.meta}
+            value={metric.value}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  function renderQuickActions() {
+    return (
+      <Card
+        className={styles.quickActionsCard}
+        title="Quick Actions"
+      >
+        <div className={styles.quickActionsBody}>
+          <div className={styles.quickLinksGrid}>
+            {viewModel.quickLinks.map((item) => (
+              <button
+                className={cx(styles.quickActionChip, item.available && styles.quickActionChipPrimary)}
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  if (item.route) {
+                    navigate(item.route);
+                  }
+                }}
+              >
+                <span className={styles.quickActionIconWrap}>{renderQuickActionIcon(item.id)}</span>
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+          <div className={styles.priorityNote}>
+            <StatusChip label={`${pendingActionCount} pending`} size="sm" tone="warning" />
+            <div className={styles.priorityNoteCopy}>
+              <span>Operational queue</span>
+              <strong>Attendance, fee follow-up, and settings review remain open.</strong>
+            </div>
+            {availablePendingAction ? (
+              <Button
+                label={availablePendingAction.actionLabel}
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  if (availablePendingAction.route) {
+                    navigate(availablePendingAction.route);
+                  }
+                }}
+              />
+            ) : null}
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderAdmissionsCard() {
+    return (
+      <Card
+        actions={isMobile ? renderSearchCluster("Search admissions") : undefined}
+        className={styles.admissionCard}
+        description="New student applications awaiting processing."
+        title="Recent Admission Requests"
+      >
+        {filteredAdmissions.length === 0 ? (
+          <p className={styles.emptyState}>No admission requests match the current search.</p>
+        ) : (
+          <div className={styles.admissionTable}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Class</th>
+                  <th>Submitted</th>
+                  <th>Documents</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredAdmissions.map((row: AdminDashboardAdmissionRequest) => (
+                  <tr key={row.id}>
+                    <td>
+                      <div className={styles.studentCell}>
+                        <strong>{row.studentName}</strong>
+                        <span>Parent: {row.guardianName}</span>
+                      </div>
+                    </td>
+                    <td>{row.classLabel}</td>
+                    <td>{row.submittedLabel}</td>
+                    <td>{row.documentProgress}</td>
+                    <td>
+                      <StatusChip
+                        label={row.statusLabel}
+                        size="sm"
+                        tone={mapAdmissionTone(row.statusLabel)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
+    );
+  }
+
+  function renderOccupancyCard() {
+    return (
+      <Card
+        className={styles.occupancyCard}
+        description="Current occupancy across active classes."
+        title="Class-wise Student Count"
+      >
+        <div className={styles.occupancyList}>
+          {viewModel.classOccupancy.map((item) => (
+            <div key={item.id}>{renderOccupancyBar(item)}</div>
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  function renderNoticesCard() {
+    return (
+      <Card
+        actions={isMobile ? renderSearchCluster("Search notices") : undefined}
+        className={styles.noticeCard}
+        description="Latest updates shared across the school."
+        title="Recent Notices"
+      >
+        {filteredNotices.length === 0 ? (
+          <p className={styles.emptyState}>No notices match the current search.</p>
+        ) : (
+          <div className={styles.noticeRows}>
+            {filteredNotices.slice(0, 2).map((item) => (
+              <article className={styles.noticeRow} key={item.id}>
+                <span
+                  aria-hidden="true"
+                  className={cx(
+                    styles.noticeDot,
+                    item.stateTone === "warning" && styles.noticeDotWarning
+                  )}
+                />
+                <div className={styles.noticeCopy}>
+                  <strong>{item.title}</strong>
+                  <span>
+                    {item.publishTiming} · {item.audience}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </Card>
+    );
+  }
+
+  function renderAttendanceSummaryCard() {
+    return (
+      <Card
+        className={styles.summaryCard}
+        description="Daily attendance completion and status."
+        title="Attendance Summary"
+      >
+        <div className={styles.attendanceBody}>
+          <CircularProgress
+            centerLabel={`${viewModel.attendanceOverview.presentPercentage}%`}
+            hint={viewModel.attendanceOverview.hint}
+            size="md"
+            tone="accent"
+            value={viewModel.attendanceOverview.presentPercentage}
+            valueLabel={viewModel.attendanceOverview.presentLabel}
+          />
+          <DataList
+            className={styles.summaryList}
+            items={viewModel.attendanceOverview.metrics}
+            renderItem={(item) => (
+              <div className={styles.summaryListRow}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </div>
+            )}
+          />
+        </div>
+      </Card>
+    );
+  }
+
+  function renderFeeCollectionCard() {
+    return (
+      <Card
+        className={styles.summaryCard}
+        description={viewModel.feeCollectionOverview.changeLabel}
+        title="Fee Collection"
+      >
+        <div className={styles.feeCollectionBody}>
+          <div className={styles.collectionHeadline}>
+            <span>{viewModel.feeCollectionOverview.subtitle}</span>
+            <strong>{viewModel.feeCollectionOverview.collectedToday}</strong>
+          </div>
+          <div className={styles.collectionBars}>
+            {viewModel.feeCollectionOverview.bars.map((bar) => (
+              <div className={styles.collectionBarItem} key={bar.id}>
+                <div className={styles.collectionBarTrack}>
+                  <span
+                    className={styles.collectionBarFill}
+                    style={{ height: `${bar.value}%` }}
+                  />
+                </div>
+                <span>{bar.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderSummaryPair() {
+    return (
+      <div className={styles.summaryPair}>
+        {renderAttendanceSummaryCard()}
+        {renderFeeCollectionCard()}
+      </div>
+    );
+  }
+
+  function renderDesktopWorkspace() {
+    return (
+      <>
+        {renderMetricsGrid()}
+        {renderQuickActions()}
+
+        <section className={styles.workspaceGrid}>
+          <div className={styles.primaryColumn}>
+            {renderAdmissionsCard()}
+            {renderOccupancyCard()}
+          </div>
+
+          <div className={styles.secondaryColumn}>
+            {renderNoticesCard()}
+            {renderSummaryPair()}
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  function renderMobileWorkspace() {
+    switch (activeMobileSection) {
+      case "attendance":
+        return renderAttendanceSummaryCard();
+      case "fees":
+        return renderFeeCollectionCard();
+      case "actions":
+        return renderQuickActions();
+      case "admissions":
+        return renderAdmissionsCard();
+      case "notices":
+        return renderNoticesCard();
+      case "capacity":
+        return renderOccupancyCard();
+      case "overview":
+      default:
+        return renderMetricsGrid();
+    }
+  }
 
   return (
     <BackOfficeShell
@@ -223,235 +547,28 @@ export function AdminDashboardPage(props: AdminDashboardPageProps = {}) {
             </div>
           }
           description={`${viewModel.tenant.display.displayName} · Academic Year ${viewModel.academicYearLabel}`}
-          search={
-            <div className={styles.searchCluster}>
-              <label className={styles.searchField}>
-                <span aria-hidden="true" className={styles.searchIcon} />
-                <input
-                  onChange={(event) => {
-                    setQuery(event.target.value);
-                  }}
-                  placeholder="Search students, fees, notices"
-                  type="search"
-                  value={query}
-                />
-              </label>
-              <button className={styles.yearBadge} type="button">
-                <span>{viewModel.academicYearLabel}</span>
-                <span aria-hidden="true" className={styles.chevronDown} />
-              </button>
-            </div>
-          }
+          search={isMobile ? undefined : renderSearchCluster()}
           title={viewModel.title}
         />
 
         <section className={styles.workspaceBody}>
-          <div className={styles.metricsGrid}>
-            {viewModel.metrics.map((metric) => (
-              <MetricCard
-                className={cx(styles.metricCard, mapMetricTone(metric))}
-                elevation="raised"
-                icon={mapMetricIcon(metric.id)}
-                key={metric.id}
-                label={metric.label}
-                meta={metric.meta}
-                value={metric.value}
+          {isMobile ? (
+            <>
+              <Tabs
+                activeValue={activeMobileSection}
+                aria-label="Dashboard mobile sections"
+                className={styles.mobileSectionTabs}
+                items={mobileSections}
+                size="sm"
+                onValueChange={(value) => {
+                  setActiveMobileSection(value as AdminDashboardMobileSection);
+                }}
               />
-            ))}
-          </div>
-
-          <Card
-            className={styles.quickActionsCard}
-            title="Quick Actions"
-          >
-            <div className={styles.quickActionsBody}>
-              <div className={styles.quickLinksGrid}>
-                {viewModel.quickLinks.map((item) => (
-                  <button
-                    className={cx(styles.quickActionChip, item.available && styles.quickActionChipPrimary)}
-                    key={item.id}
-                    type="button"
-                    onClick={() => {
-                      if (item.route) {
-                        navigate(item.route);
-                      }
-                    }}
-                  >
-                    <span className={styles.quickActionIconWrap}>{renderQuickActionIcon(item.id)}</span>
-                    <span>{item.label}</span>
-                  </button>
-                ))}
-              </div>
-              <div className={styles.priorityNote}>
-                <StatusChip label={`${pendingActionCount} pending`} size="sm" tone="warning" />
-                <div className={styles.priorityNoteCopy}>
-                  <span>Operational queue</span>
-                  <strong>Attendance, fee follow-up, and settings review remain open.</strong>
-                </div>
-                {availablePendingAction ? (
-                  <Button
-                    label={availablePendingAction.actionLabel}
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      if (availablePendingAction.route) {
-                        navigate(availablePendingAction.route);
-                      }
-                    }}
-                  />
-                ) : null}
-              </div>
-            </div>
-          </Card>
-
-          <section className={styles.workspaceGrid}>
-            <div className={styles.primaryColumn}>
-              <Card
-                className={styles.admissionCard}
-                description="New student applications awaiting processing."
-                title="Recent Admission Requests"
-              >
-                {filteredAdmissions.length === 0 ? (
-                  <p className={styles.emptyState}>No admission requests match the current search.</p>
-                ) : (
-                  <div className={styles.admissionTable}>
-                    <table className={styles.table}>
-                      <thead>
-                        <tr>
-                          <th>Student</th>
-                          <th>Class</th>
-                          <th>Submitted</th>
-                          <th>Documents</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filteredAdmissions.map((row: AdminDashboardAdmissionRequest) => (
-                          <tr key={row.id}>
-                            <td>
-                              <div className={styles.studentCell}>
-                                <strong>{row.studentName}</strong>
-                                <span>Parent: {row.guardianName}</span>
-                              </div>
-                            </td>
-                            <td>{row.classLabel}</td>
-                            <td>{row.submittedLabel}</td>
-                            <td>{row.documentProgress}</td>
-                            <td>
-                              <StatusChip
-                                label={row.statusLabel}
-                                size="sm"
-                                tone={mapAdmissionTone(row.statusLabel)}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </Card>
-
-              <Card
-                className={styles.occupancyCard}
-                description="Current occupancy across active classes."
-                title="Class-wise Student Count"
-              >
-                <div className={styles.occupancyList}>
-                  {viewModel.classOccupancy.map((item) => (
-                    <div key={item.id}>{renderOccupancyBar(item)}</div>
-                  ))}
-                </div>
-              </Card>
-            </div>
-
-            <div className={styles.secondaryColumn}>
-              <Card
-                className={styles.noticeCard}
-                description="Latest updates shared across the school."
-                title="Recent Notices"
-              >
-                {filteredNotices.length === 0 ? (
-                  <p className={styles.emptyState}>No notices match the current search.</p>
-                ) : (
-                  <div className={styles.noticeRows}>
-                    {filteredNotices.slice(0, 2).map((item) => (
-                      <article className={styles.noticeRow} key={item.id}>
-                        <span
-                          aria-hidden="true"
-                          className={cx(
-                            styles.noticeDot,
-                            item.stateTone === "warning" && styles.noticeDotWarning
-                          )}
-                        />
-                        <div className={styles.noticeCopy}>
-                          <strong>{item.title}</strong>
-                          <span>
-                            {item.publishTiming} · {item.audience}
-                          </span>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                )}
-              </Card>
-
-              <div className={styles.summaryPair}>
-                <Card
-                  className={styles.summaryCard}
-                  description="Daily attendance completion and status."
-                  title="Attendance Summary"
-                >
-                  <div className={styles.attendanceBody}>
-                    <CircularProgress
-                      centerLabel={`${viewModel.attendanceOverview.presentPercentage}%`}
-                      hint={viewModel.attendanceOverview.hint}
-                      size="md"
-                      tone="accent"
-                      value={viewModel.attendanceOverview.presentPercentage}
-                      valueLabel={viewModel.attendanceOverview.presentLabel}
-                    />
-                    <DataList
-                      className={styles.summaryList}
-                      items={viewModel.attendanceOverview.metrics}
-                      renderItem={(item) => (
-                        <div className={styles.summaryListRow}>
-                          <span>{item.label}</span>
-                          <strong>{item.value}</strong>
-                        </div>
-                      )}
-                    />
-                  </div>
-                </Card>
-
-                <Card
-                  className={styles.summaryCard}
-                  description={viewModel.feeCollectionOverview.changeLabel}
-                  title="Fee Collection"
-                >
-                  <div className={styles.feeCollectionBody}>
-                    <div className={styles.collectionHeadline}>
-                      <span>{viewModel.feeCollectionOverview.subtitle}</span>
-                      <strong>{viewModel.feeCollectionOverview.collectedToday}</strong>
-                    </div>
-                    <div className={styles.collectionBars}>
-                      {viewModel.feeCollectionOverview.bars.map((bar) => (
-                        <div className={styles.collectionBarItem} key={bar.id}>
-                          <div className={styles.collectionBarTrack}>
-                            <span
-                              className={styles.collectionBarFill}
-                              style={{ height: `${bar.value}%` }}
-                            />
-                          </div>
-                          <span>{bar.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              </div>
-            </div>
-          </section>
+              {renderMobileWorkspace()}
+            </>
+          ) : (
+            renderDesktopWorkspace()
+          )}
         </section>
       </div>
     </BackOfficeShell>

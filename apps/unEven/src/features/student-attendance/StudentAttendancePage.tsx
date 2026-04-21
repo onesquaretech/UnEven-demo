@@ -10,7 +10,8 @@ import {
   FilterBar,
   PageHeader,
   SegmentedControl,
-  StatusChip
+  StatusChip,
+  Tabs
 } from "../../ui";
 import type {
   DataTableColumn,
@@ -102,6 +103,15 @@ function renderFollowUpCard(item: StudentAttendanceFollowUp) {
   );
 }
 
+type StudentAttendanceMobileSection = "register" | "summary" | "follow-up" | "actions";
+
+const mobileSections: Array<{ value: StudentAttendanceMobileSection; label: string }> = [
+  { value: "register", label: "Register" },
+  { value: "summary", label: "Summary" },
+  { value: "follow-up", label: "Follow Up" },
+  { value: "actions", label: "Actions" }
+];
+
 export interface StudentAttendancePageProps {
   themeMode?: ThemeMode;
   onThemeToggle?: () => void;
@@ -127,6 +137,7 @@ export function StudentAttendancePage(props: StudentAttendancePageProps = {}) {
   const [rows, setRows] = useState(viewModel.rows);
   const [page, setPage] = useState(1);
   const [lastSavedAt, setLastSavedAt] = useState("8:41 AM");
+  const [activeMobileSection, setActiveMobileSection] = useState<StudentAttendanceMobileSection>("register");
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -188,6 +199,7 @@ export function StudentAttendancePage(props: StudentAttendancePageProps = {}) {
 
   const presentPercentage = rows.length > 0 ? Math.round((summaryCounts.present / rows.length) * 100) : 0;
   const pendingChanges = rows.filter((row) => row.status !== "present").length;
+  const isMobile = viewport === "mobile";
 
   function updateRowStatus(rowId: string, status: string) {
     setRows((current) =>
@@ -256,6 +268,307 @@ export function StudentAttendancePage(props: StudentAttendancePageProps = {}) {
     }
   ];
 
+  function renderSummaryStrip() {
+    return (
+      <div className={styles.summaryStrip}>
+        <div className={styles.summaryTrack}>
+          <span className={styles.summaryPresent} style={{ width: `${(summaryCounts.present / rows.length) * 100}%` }} />
+          <span className={styles.summaryLeave} style={{ width: `${(summaryCounts.leave / rows.length) * 100}%` }} />
+          <span className={styles.summaryAbsent} style={{ width: `${(summaryCounts.absent / rows.length) * 100}%` }} />
+        </div>
+        <div className={styles.summaryMeta}>
+          <span className={styles.summaryLabel}>
+            Class strength {viewModel.summary.classStrength} · Present {summaryCounts.present} · Leave {summaryCounts.leave} · Absent {summaryCounts.absent}
+          </span>
+          <StatusChip label={viewModel.summary.absentNotificationLabel} size="sm" tone="danger" />
+        </div>
+      </div>
+    );
+  }
+
+  function renderFilterCard() {
+    return (
+      <Card className={styles.filterCard} elevation="raised" padding="md">
+        <FilterBar
+          actionPlacement="inline"
+          className={styles.filterBar}
+          actions={
+            <div className={styles.filterActions}>
+              {viewModel.markModeOptions.map((option) => (
+                <Button
+                  className={styles.filterModeButton}
+                  key={option.value}
+                  label={option.label}
+                  onClick={() => {
+                    setMarkMode(option.value as "present" | "absent");
+                  }}
+                  size="sm"
+                  variant={markMode === option.value ? "primary" : "secondary"}
+                />
+              ))}
+            </div>
+          }
+        >
+          <div className={styles.filterField}>
+            <Field
+              label="Class"
+              options={viewModel.classOptions}
+              selectProps={{ onChange: updateSelectValue(setClassValue) }}
+              type="select"
+              value={classValue}
+            />
+          </div>
+          <div className={styles.filterField}>
+            <Field
+              label="Section"
+              options={viewModel.sectionOptions}
+              selectProps={{ onChange: updateSelectValue(setSectionValue) }}
+              type="select"
+              value={sectionValue}
+            />
+          </div>
+          <div className={styles.dateField}>
+            <Field
+              label="Date"
+              options={viewModel.dateOptions}
+              selectProps={{ onChange: updateSelectValue(setDateValue) }}
+              type="select"
+              value={dateValue}
+            />
+          </div>
+          <div className={styles.searchField}>
+            <Field
+              inputProps={{ onChange: updateTextValue(setSearchQuery) }}
+              label="Search"
+              placeholder={viewModel.searchPlaceholder}
+              type="text"
+              value={searchQuery}
+            />
+          </div>
+          <div className={styles.statusField}>
+            <Field
+              label="Status"
+              options={viewModel.statusFilterOptions}
+              selectProps={{ onChange: updateSelectValue(setStatusFilter) }}
+              type="select"
+              value={statusFilter}
+            />
+          </div>
+        </FilterBar>
+
+        {renderSummaryStrip()}
+      </Card>
+    );
+  }
+
+  function renderBulkCard() {
+    return (
+      <Card className={styles.bulkCard} elevation="subtle" padding="md">
+        <div className={styles.bulkBar}>
+          <strong className={styles.bulkLabel}>Bulk mark</strong>
+          <div className={styles.bulkActions}>
+            {viewModel.bulkActions.map((action) => (
+              <Button
+                key={action.id}
+                label={action.label}
+                onClick={() => {
+                  applyBulkStatus(action.id);
+                }}
+                size="md"
+                variant={mapBulkVariant(action.tone)}
+              />
+            ))}
+          </div>
+          <span className={styles.lastSaved}>Last saved {lastSavedAt}</span>
+        </div>
+      </Card>
+    );
+  }
+
+  function renderRegisterCard() {
+    return (
+      <Card
+        className={styles.tableCard}
+        description={viewModel.register.description}
+        elevation="raised"
+        padding="md"
+        title={viewModel.register.title}
+      >
+        <DataTable
+          className={styles.dataTable}
+          columns={columns}
+          emptyState="No students match the current attendance filters."
+          pagination={{
+            onPageChange: setPage,
+            page,
+            summary: viewModel.register.paginationSummary,
+            totalPages: 2
+          }}
+          rowKey="id"
+          rows={filteredRows}
+        />
+      </Card>
+    );
+  }
+
+  function renderSummaryPanelTop() {
+    return (
+      <div className={styles.summaryPanelTop}>
+        <CircularProgress
+          centerLabel={`${presentPercentage}%`}
+          className={styles.summaryMeter}
+          size="md"
+          tone="accent"
+          value={presentPercentage}
+          valueLabel=""
+        />
+        <div className={styles.summaryStats}>
+          {viewModel.summary.metrics.map((metric) => (
+            <div className={styles.summaryStat} key={metric.id}>
+              <span>{metric.label}</span>
+              <strong>
+                {metric.id === "present"
+                  ? summaryCounts.present
+                  : metric.id === "absent"
+                  ? summaryCounts.absent
+                  : summaryCounts.leave}
+              </strong>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function renderFollowUpSection() {
+    return (
+      <section className={styles.followUpSection}>
+        <h3>Follow-up</h3>
+        <div className={styles.followUpStack}>{viewModel.summary.followUps.map(renderFollowUpCard)}</div>
+      </section>
+    );
+  }
+
+  function renderQuickLinksSection() {
+    return (
+      <section className={styles.quickLinksSection}>
+        <h3>Quick Links</h3>
+        <div className={styles.quickLinksStack}>
+          {viewModel.summary.quickLinks.map((link) => (
+            <Button
+              className={styles.quickLinkButton}
+              iconRight={createIcon("chevronRight")}
+              key={link.id}
+              label={link.label}
+              size="md"
+              variant="secondary"
+            />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  function renderPendingCard() {
+    return (
+      <Card className={styles.pendingCard} elevation="subtle" padding="md">
+        <div className={styles.pendingCardBody}>
+          <span className={styles.pendingLabel}>{viewModel.summary.pendingChangesLabel}</span>
+          <strong className={styles.pendingValue}>{pendingChanges} rows updated</strong>
+          <span className={styles.pendingNote}>{viewModel.summary.pendingChangesNote}</span>
+          <Button
+            label={viewModel.actionLabels.saveAttendance}
+            onClick={handleSaveAttendance}
+            size="md"
+          />
+        </div>
+      </Card>
+    );
+  }
+
+  function renderDesktopWorkspace() {
+    return (
+      <>
+        {renderFilterCard()}
+        {renderBulkCard()}
+
+        <div className={styles.contentGrid}>
+          <div className={styles.tableColumn}>{renderRegisterCard()}</div>
+
+          <div className={styles.sideColumn}>
+            <Card
+              className={styles.sidePanelCard}
+              description="Today's class snapshot and follow-up flags"
+              elevation="raised"
+              padding="md"
+              title="Attendance Summary"
+            >
+              {renderSummaryPanelTop()}
+
+              <div className={styles.sideDivider} />
+
+              {renderFollowUpSection()}
+
+              <div className={styles.sideDivider} />
+
+              {renderQuickLinksSection()}
+
+              {renderPendingCard()}
+            </Card>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  function renderMobileWorkspace() {
+    if (activeMobileSection === "summary") {
+      return (
+        <Card
+          className={styles.sidePanelCard}
+          description="Today's class snapshot"
+          elevation="raised"
+          padding="md"
+          title="Attendance Summary"
+        >
+          {renderSummaryPanelTop()}
+          {renderSummaryStrip()}
+        </Card>
+      );
+    }
+
+    if (activeMobileSection === "follow-up") {
+      return (
+        <Card
+          className={styles.sidePanelCard}
+          description="Students needing parent or approval follow-up"
+          elevation="raised"
+          padding="md"
+          title="Attendance Follow-up"
+        >
+          {renderFollowUpSection()}
+        </Card>
+      );
+    }
+
+    if (activeMobileSection === "actions") {
+      return (
+        <div className={styles.mobileActionStack}>
+          {renderBulkCard()}
+          {renderPendingCard()}
+          {renderQuickLinksSection()}
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {renderFilterCard()}
+        {renderRegisterCard()}
+      </>
+    );
+  }
+
   return (
     <BackOfficeShell
       className={styles.shell}
@@ -291,12 +604,14 @@ export function StudentAttendancePage(props: StudentAttendancePageProps = {}) {
                 size="lg"
                 variant="secondary"
               />
-              <Button
-                iconLeft={createIcon("save")}
-                label={viewModel.actionLabels.saveAttendance}
-                onClick={handleSaveAttendance}
-                size="lg"
-              />
+              {!isMobile ? (
+                <Button
+                  iconLeft={createIcon("save")}
+                  label={viewModel.actionLabels.saveAttendance}
+                  onClick={handleSaveAttendance}
+                  size="lg"
+                />
+              ) : null}
             </div>
           }
           description={viewModel.description}
@@ -304,207 +619,23 @@ export function StudentAttendancePage(props: StudentAttendancePageProps = {}) {
         />
 
         <Card className={styles.workspaceBody} elevation="subtle" padding="lg">
-          <Card className={styles.filterCard} elevation="raised" padding="md">
-            <FilterBar
-              actionPlacement="inline"
-              className={styles.filterBar}
-              actions={
-                <div className={styles.filterActions}>
-                  {viewModel.markModeOptions.map((option) => (
-                    <Button
-                      className={styles.filterModeButton}
-                      key={option.value}
-                      label={option.label}
-                      onClick={() => {
-                        setMarkMode(option.value as "present" | "absent");
-                      }}
-                      size="sm"
-                      variant={markMode === option.value ? "primary" : "secondary"}
-                    />
-                  ))}
-                </div>
-              }
-            >
-              <div className={styles.filterField}>
-                <Field
-                  label="Class"
-                  options={viewModel.classOptions}
-                  selectProps={{ onChange: updateSelectValue(setClassValue) }}
-                  type="select"
-                  value={classValue}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Section"
-                  options={viewModel.sectionOptions}
-                  selectProps={{ onChange: updateSelectValue(setSectionValue) }}
-                  type="select"
-                  value={sectionValue}
-                />
-              </div>
-              <div className={styles.dateField}>
-                <Field
-                  label="Date"
-                  options={viewModel.dateOptions}
-                  selectProps={{ onChange: updateSelectValue(setDateValue) }}
-                  type="select"
-                  value={dateValue}
-                />
-              </div>
-              <div className={styles.searchField}>
-                <Field
-                  inputProps={{ onChange: updateTextValue(setSearchQuery) }}
-                  label="Search"
-                  placeholder={viewModel.searchPlaceholder}
-                  type="text"
-                  value={searchQuery}
-                />
-              </div>
-              <div className={styles.statusField}>
-                <Field
-                  label="Status"
-                  options={viewModel.statusFilterOptions}
-                  selectProps={{ onChange: updateSelectValue(setStatusFilter) }}
-                  type="select"
-                  value={statusFilter}
-                />
-              </div>
-            </FilterBar>
-
-            <div className={styles.summaryStrip}>
-              <div className={styles.summaryTrack}>
-                <span className={styles.summaryPresent} style={{ width: `${(summaryCounts.present / rows.length) * 100}%` }} />
-                <span className={styles.summaryLeave} style={{ width: `${(summaryCounts.leave / rows.length) * 100}%` }} />
-                <span className={styles.summaryAbsent} style={{ width: `${(summaryCounts.absent / rows.length) * 100}%` }} />
-              </div>
-              <div className={styles.summaryMeta}>
-                <span className={styles.summaryLabel}>
-                  Class strength {viewModel.summary.classStrength} · Present {summaryCounts.present} · Leave {summaryCounts.leave} · Absent {summaryCounts.absent}
-                </span>
-                <StatusChip label={viewModel.summary.absentNotificationLabel} size="sm" tone="danger" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className={styles.bulkCard} elevation="subtle" padding="md">
-            <div className={styles.bulkBar}>
-              <strong className={styles.bulkLabel}>Bulk mark</strong>
-              <div className={styles.bulkActions}>
-                {viewModel.bulkActions.map((action) => (
-                  <Button
-                    key={action.id}
-                    label={action.label}
-                    onClick={() => {
-                      applyBulkStatus(action.id);
-                    }}
-                    size="md"
-                    variant={mapBulkVariant(action.tone)}
-                  />
-                ))}
-              </div>
-              <span className={styles.lastSaved}>Last saved {lastSavedAt}</span>
-            </div>
-          </Card>
-
-          <div className={styles.contentGrid}>
-            <div className={styles.tableColumn}>
-              <Card
-                className={styles.tableCard}
-                description={viewModel.register.description}
-                elevation="raised"
-                padding="md"
-                title={viewModel.register.title}
-              >
-                <DataTable
-                  className={styles.dataTable}
-                  columns={columns}
-                  emptyState="No students match the current attendance filters."
-                  pagination={{
-                    onPageChange: setPage,
-                    page,
-                    summary: viewModel.register.paginationSummary,
-                    totalPages: 2
-                  }}
-                  rowKey="id"
-                  rows={filteredRows}
-                />
-              </Card>
-            </div>
-
-            <div className={styles.sideColumn}>
-              <Card
-                className={styles.sidePanelCard}
-                description="Today's class snapshot and follow-up flags"
-                elevation="raised"
-                padding="md"
-                title="Attendance Summary"
-              >
-                <div className={styles.summaryPanelTop}>
-                  <CircularProgress
-                    centerLabel={`${presentPercentage}%`}
-                    className={styles.summaryMeter}
-                    size="md"
-                    tone="accent"
-                    value={presentPercentage}
-                    valueLabel=""
-                  />
-                  <div className={styles.summaryStats}>
-                    {viewModel.summary.metrics.map((metric) => (
-                      <div className={styles.summaryStat} key={metric.id}>
-                        <span>{metric.label}</span>
-                        <strong>
-                          {metric.id === "present"
-                            ? summaryCounts.present
-                            : metric.id === "absent"
-                            ? summaryCounts.absent
-                            : summaryCounts.leave}
-                        </strong>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className={styles.sideDivider} />
-
-                <section className={styles.followUpSection}>
-                  <h3>Follow-up</h3>
-                  <div className={styles.followUpStack}>{viewModel.summary.followUps.map(renderFollowUpCard)}</div>
-                </section>
-
-                <div className={styles.sideDivider} />
-
-                <section className={styles.quickLinksSection}>
-                  <h3>Quick Links</h3>
-                  <div className={styles.quickLinksStack}>
-                    {viewModel.summary.quickLinks.map((link) => (
-                      <Button
-                        className={styles.quickLinkButton}
-                        iconRight={createIcon("chevronRight")}
-                        key={link.id}
-                        label={link.label}
-                        size="md"
-                        variant="secondary"
-                      />
-                    ))}
-                  </div>
-                </section>
-
-                <Card className={styles.pendingCard} elevation="subtle" padding="md">
-                  <div className={styles.pendingCardBody}>
-                    <span className={styles.pendingLabel}>{viewModel.summary.pendingChangesLabel}</span>
-                    <strong className={styles.pendingValue}>{pendingChanges} rows updated</strong>
-                    <span className={styles.pendingNote}>{viewModel.summary.pendingChangesNote}</span>
-                    <Button
-                      label={viewModel.actionLabels.saveAttendance}
-                      onClick={handleSaveAttendance}
-                      size="md"
-                    />
-                  </div>
-                </Card>
-              </Card>
-            </div>
-          </div>
+          {isMobile ? (
+            <>
+              <Tabs
+                activeValue={activeMobileSection}
+                aria-label="Attendance mobile sections"
+                className={styles.mobileSectionTabs}
+                items={mobileSections}
+                size="sm"
+                onValueChange={(value) => {
+                  setActiveMobileSection(value as StudentAttendanceMobileSection);
+                }}
+              />
+              {renderMobileWorkspace()}
+            </>
+          ) : (
+            renderDesktopWorkspace()
+          )}
         </Card>
       </div>
     </BackOfficeShell>

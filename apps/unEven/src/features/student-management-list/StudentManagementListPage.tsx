@@ -15,7 +15,8 @@ import {
   Field,
   FilterBar,
   PageHeader,
-  StatusChip
+  StatusChip,
+  Tabs
 } from "../../ui";
 import type { DataTableColumn, ThemeMode } from "../../ui";
 import { buildBackOfficeNavigation } from "../../app/navigation";
@@ -54,6 +55,16 @@ function updateSelectValue(setter: (value: string) => void) {
     setter(event.target.value);
   };
 }
+
+type StudentManagementListMobileSection = "students" | "filters" | "summary" | "notes" | "actions";
+
+const mobileSections: Array<{ value: StudentManagementListMobileSection; label: string }> = [
+  { value: "students", label: "Students" },
+  { value: "filters", label: "Filters" },
+  { value: "summary", label: "Summary" },
+  { value: "notes", label: "Notes" },
+  { value: "actions", label: "Actions" }
+];
 
 function renderSummaryMetric(metric: StudentManagementListSummaryMetric) {
   return (
@@ -120,6 +131,9 @@ export function StudentManagementListPage(props: StudentManagementListPageProps 
   const [statusFilter, setStatusFilter] = useState("Active");
   const [yearFilter, setYearFilter] = useState("");
   const [page, setPage] = useState(viewModel.pagination.page);
+  const [activeMobileSection, setActiveMobileSection] =
+    useState<StudentManagementListMobileSection>("students");
+  const isMobile = viewport === "mobile";
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -222,6 +236,253 @@ export function StudentManagementListPage(props: StudentManagementListPageProps 
     }
   ];
 
+  const renderHeaderActions = () => (
+    <div className={styles.headerActions}>
+      <Button
+        iconRight={createButtonIcon("chevronDown")}
+        label={viewModel.bulkActionLabel}
+        variant="secondary"
+      />
+      <Button iconLeft={createButtonIcon("plus")} label={viewModel.primaryActionLabel} />
+    </div>
+  );
+
+  const resetFilters = () => {
+    setSearchQuery("");
+    setClassFilter("5");
+    setSectionFilter("A");
+    setStatusFilter("Active");
+    setYearFilter("");
+  };
+
+  const renderFilterCard = () => (
+    <Card className={styles.filterCard} padding="lg">
+      <FilterBar
+        actionPlacement="stacked"
+        actions={
+          <Button
+            className={styles.clearFiltersButton}
+            label="Reset"
+            onClick={resetFilters}
+            size="sm"
+            variant="ghost"
+          />
+        }
+        className={styles.filterBar}
+      >
+        <div className={styles.filterFieldWide}>
+          <Field
+            label="Search"
+            placeholder={viewModel.searchPlaceholder}
+            value={searchQuery}
+            inputProps={{
+              onChange: updateTextValue(setSearchQuery)
+            }}
+          />
+        </div>
+        <div className={styles.filterField}>
+          <Field
+            label="Class"
+            options={viewModel.classOptions}
+            type="select"
+            value={classFilter}
+            selectProps={{
+              onChange: updateSelectValue(setClassFilter)
+            }}
+          />
+        </div>
+        <div className={styles.filterField}>
+          <Field
+            label="Section"
+            options={viewModel.sectionOptions}
+            type="select"
+            value={sectionFilter}
+            selectProps={{
+              onChange: updateSelectValue(setSectionFilter)
+            }}
+          />
+        </div>
+        <div className={styles.filterField}>
+          <Field
+            label="Status"
+            options={viewModel.statusOptions}
+            type="select"
+            value={statusFilter}
+            selectProps={{
+              onChange: updateSelectValue(setStatusFilter)
+            }}
+          />
+        </div>
+        <div className={styles.filterField}>
+          <Field
+            label="Admission Year"
+            options={viewModel.yearOptions}
+            type="select"
+            value={yearFilter}
+            selectProps={{
+              onChange: updateSelectValue(setYearFilter)
+            }}
+          />
+        </div>
+      </FilterBar>
+
+      <div className={styles.filterFooter}>
+        <div className={styles.filterChips}>
+          {viewModel.appliedFilterLabels.map((label, index) => (
+            <StatusChip
+              key={label}
+              label={label}
+              size="sm"
+              tone={index < 2 ? "info" : "neutral"}
+            />
+          ))}
+        </div>
+        <span className={styles.filterSummary}>{viewModel.summaryLabel}</span>
+      </div>
+    </Card>
+  );
+
+  const renderBulkCard = () => (
+    <Card className={styles.bulkCard} elevation="subtle" padding="md">
+      <div className={styles.bulkCardContent}>
+        <div className={styles.bulkLead}>
+          <span aria-hidden="true" className={styles.bulkLeadIcon}>
+            <span className={styles.bulkLeadCheck} />
+          </span>
+          <strong>{viewModel.selectedSummaryLabel}</strong>
+        </div>
+        <div className={styles.bulkActions}>
+          {viewModel.bulkActions.map((action) => (
+            <Button key={action.id} label={action.label} size="sm" variant="secondary" />
+          ))}
+        </div>
+        <Button className={styles.clearSelectionButton} label="Clear selection" size="sm" variant="ghost" />
+      </div>
+    </Card>
+  );
+
+  const renderTableCard = () => (
+    <Card className={styles.tableShellCard} padding="none">
+      <div className={styles.tableHeading}>
+        <div>
+          <h2>{viewModel.tableTitle}</h2>
+          <p>{viewModel.tableDescription}</p>
+        </div>
+      </div>
+      <DataTable
+        className={styles.tableCard}
+        columns={columns}
+        emptyState={<p className={styles.emptyState}>No students match the current filters.</p>}
+        pagination={{
+          page,
+          totalPages: viewModel.pagination.totalPages,
+          summary: viewModel.pagination.summary,
+          onPageChange: setPage
+        }}
+        rowActions={(row) => renderActionButton(row, navigate)}
+        rowKey="id"
+        rows={filteredRows}
+        selectable
+        stickyHeader
+      />
+    </Card>
+  );
+
+  const renderSummaryMetricsCard = () => (
+    <Card className={styles.summaryCard} padding="lg" title="Record Summary" description="Operational view for quick admin decisions">
+      <div className={styles.summaryStack}>
+        {viewModel.summaryMetrics.map((metric) => renderSummaryMetric(metric))}
+      </div>
+    </Card>
+  );
+
+  const renderNotesCard = () => (
+    <Card className={styles.summaryCard} padding="lg" title="Recent Admin Notes" description="Student record updates and follow-ups">
+      <ActivityFeed
+        compact
+        items={viewModel.notes.map((note) => ({
+          id: note.id,
+          title: note.title,
+          description: note.description,
+          timestamp: note.timestamp,
+          leading: (
+            <span
+              className={cx(
+                styles.noteDot,
+                note.tone === "warning" && styles.noteDotWarning
+              )}
+            />
+          )
+        }))}
+      />
+    </Card>
+  );
+
+  const renderSummaryRail = () => (
+    <Card className={styles.summaryCard} padding="lg" title="Record Summary" description="Operational view for quick admin decisions">
+      <div className={styles.summaryStack}>
+        {viewModel.summaryMetrics.map((metric) => renderSummaryMetric(metric))}
+        <section className={styles.notesSection}>
+          <h3>Recent Admin Notes</h3>
+          <ActivityFeed
+            compact
+            items={viewModel.notes.map((note) => ({
+              id: note.id,
+              title: note.title,
+              description: note.description,
+              timestamp: note.timestamp,
+              leading: (
+                <span
+                  className={cx(
+                    styles.noteDot,
+                    note.tone === "warning" && styles.noteDotWarning
+                  )}
+                />
+              )
+            }))}
+          />
+        </section>
+      </div>
+    </Card>
+  );
+
+  const renderDesktopWorkspace = () => (
+    <>
+      {renderFilterCard()}
+      {renderBulkCard()}
+
+      <div className={styles.contentGrid}>
+        <div className={styles.tableColumn}>{renderTableCard()}</div>
+        {renderSummaryRail()}
+      </div>
+    </>
+  );
+
+  const renderMobileWorkspace = () => {
+    if (activeMobileSection === "filters") {
+      return renderFilterCard();
+    }
+
+    if (activeMobileSection === "summary") {
+      return renderSummaryMetricsCard();
+    }
+
+    if (activeMobileSection === "notes") {
+      return renderNotesCard();
+    }
+
+    if (activeMobileSection === "actions") {
+      return (
+        <div className={styles.mobileActionStack}>
+          {renderHeaderActions()}
+          {renderBulkCard()}
+        </div>
+      );
+    }
+
+    return <div className={styles.tableColumn}>{renderTableCard()}</div>;
+  };
+
   return (
     <BackOfficeShell
       className={styles.shell}
@@ -249,183 +510,23 @@ export function StudentManagementListPage(props: StudentManagementListPageProps 
     >
       <div className={styles.page}>
         <PageHeader
-          actions={
-            <div className={styles.headerActions}>
-              <Button
-                iconRight={createButtonIcon("chevronDown")}
-                label={viewModel.bulkActionLabel}
-                variant="secondary"
-              />
-              <Button iconLeft={createButtonIcon("plus")} label={viewModel.primaryActionLabel} />
-            </div>
-          }
+          actions={renderHeaderActions()}
           description={viewModel.description}
           title={viewModel.title}
         />
 
         <section className={styles.workspaceBody}>
-          <Card className={styles.filterCard} padding="lg">
-            <FilterBar
-              actionPlacement="stacked"
-              actions={
-                <Button
-                  className={styles.clearFiltersButton}
-                  label="Reset"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setClassFilter("5");
-                    setSectionFilter("A");
-                    setStatusFilter("Active");
-                    setYearFilter("");
-                  }}
-                  size="sm"
-                  variant="ghost"
-                />
-              }
-              className={styles.filterBar}
-            >
-              <div className={styles.filterFieldWide}>
-                <Field
-                  label="Search"
-                  placeholder={viewModel.searchPlaceholder}
-                  value={searchQuery}
-                  inputProps={{
-                    onChange: updateTextValue(setSearchQuery)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Class"
-                  options={viewModel.classOptions}
-                  type="select"
-                  value={classFilter}
-                  selectProps={{
-                    onChange: updateSelectValue(setClassFilter)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Section"
-                  options={viewModel.sectionOptions}
-                  type="select"
-                  value={sectionFilter}
-                  selectProps={{
-                    onChange: updateSelectValue(setSectionFilter)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Status"
-                  options={viewModel.statusOptions}
-                  type="select"
-                  value={statusFilter}
-                  selectProps={{
-                    onChange: updateSelectValue(setStatusFilter)
-                  }}
-                />
-              </div>
-              <div className={styles.filterField}>
-                <Field
-                  label="Admission Year"
-                  options={viewModel.yearOptions}
-                  type="select"
-                  value={yearFilter}
-                  selectProps={{
-                    onChange: updateSelectValue(setYearFilter)
-                  }}
-                />
-              </div>
-            </FilterBar>
-
-            <div className={styles.filterFooter}>
-              <div className={styles.filterChips}>
-                {viewModel.appliedFilterLabels.map((label, index) => (
-                  <StatusChip
-                    key={label}
-                    label={label}
-                    size="sm"
-                    tone={index < 2 ? "info" : "neutral"}
-                  />
-                ))}
-              </div>
-              <span className={styles.filterSummary}>{viewModel.summaryLabel}</span>
-            </div>
-          </Card>
-
-          <Card className={styles.bulkCard} elevation="subtle" padding="md">
-            <div className={styles.bulkCardContent}>
-              <div className={styles.bulkLead}>
-                <span aria-hidden="true" className={styles.bulkLeadIcon}>
-                  <span className={styles.bulkLeadCheck} />
-                </span>
-                <strong>{viewModel.selectedSummaryLabel}</strong>
-              </div>
-              <div className={styles.bulkActions}>
-                {viewModel.bulkActions.map((action) => (
-                  <Button key={action.id} label={action.label} size="sm" variant="secondary" />
-                ))}
-              </div>
-              <Button className={styles.clearSelectionButton} label="Clear selection" size="sm" variant="ghost" />
-            </div>
-          </Card>
-
-          <div className={styles.contentGrid}>
-            <div className={styles.tableColumn}>
-              <Card className={styles.tableShellCard} padding="none">
-                <div className={styles.tableHeading}>
-                  <div>
-                    <h2>{viewModel.tableTitle}</h2>
-                    <p>{viewModel.tableDescription}</p>
-                  </div>
-                </div>
-                <DataTable
-                  className={styles.tableCard}
-                  columns={columns}
-                  emptyState={<p className={styles.emptyState}>No students match the current filters.</p>}
-                  pagination={{
-                    page,
-                    totalPages: viewModel.pagination.totalPages,
-                    summary: viewModel.pagination.summary,
-                    onPageChange: setPage
-                  }}
-                  rowActions={(row) => renderActionButton(row, navigate)}
-                  rowKey="id"
-                  rows={filteredRows}
-                  selectable
-                  stickyHeader
-                />
-              </Card>
-            </div>
-
-            <Card className={styles.summaryCard} padding="lg" title="Record Summary" description="Operational view for quick admin decisions">
-              <div className={styles.summaryStack}>
-                {viewModel.summaryMetrics.map((metric) => renderSummaryMetric(metric))}
-                <section className={styles.notesSection}>
-                  <h3>Recent Admin Notes</h3>
-                  <ActivityFeed
-                    compact
-                    items={viewModel.notes.map((note) => ({
-                      id: note.id,
-                      title: note.title,
-                      description: note.description,
-                      timestamp: note.timestamp,
-                      leading: (
-                        <span
-                          className={cx(
-                            styles.noteDot,
-                            note.tone === "warning" && styles.noteDotWarning
-                          )}
-                        />
-                      )
-                    }))}
-                  />
-                </section>
-              </div>
-            </Card>
-          </div>
+          <Tabs
+            activeValue={activeMobileSection}
+            ariaLabel="Student management sections"
+            className={styles.mobileSectionTabs}
+            items={mobileSections}
+            onValueChange={(value) => {
+              setActiveMobileSection(value as StudentManagementListMobileSection);
+            }}
+            size="sm"
+          />
+          {isMobile ? renderMobileWorkspace() : renderDesktopWorkspace()}
         </section>
       </div>
 

@@ -18,6 +18,11 @@
   background: color-mix(in srgb, var(--surface-raised) 74%, var(--surface-page));
 }
 
+.mobileSectionTabs {
+  display: none;
+  overflow-x: auto;
+}
+
 .filterCard {
   overflow: hidden;
 }
@@ -281,6 +286,11 @@
   gap: 0.75rem;
 }
 
+.mobileSectionStack {
+  display: grid;
+  gap: 1rem;
+}
+
 .iconGlyph {
   position: relative;
   display: inline-flex;
@@ -338,6 +348,12 @@
 @media (max-width: 720px) {
   .workspaceBody {
     padding: 1rem;
+  }
+
+  .mobileSectionTabs {
+    display: flex;
+    margin: -0.15rem -0.15rem 0;
+    padding: 0.15rem;
   }
 
   .detailActions {

@@ -295,7 +295,7 @@ export function LoginPage() {
             </div>
 
             <div className={styles.formActions}>
-                <Checkbox
+              <Checkbox
                 checked={form.rememberMe}
                 label="Keep me signed in"
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
